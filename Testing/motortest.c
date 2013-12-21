@@ -27,6 +27,8 @@ task main()
 	{
 		motor[LBoomMotor] = joystick.joy1_y1 / factor;
 		motor[RBoomMotor] = joystick.joy1_y2 / factor;
+
+		//test
 	}
 
 }
