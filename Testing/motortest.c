@@ -1,3 +1,7 @@
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
+#pragma config(Hubs,  S2, HTServo,  none,     none,     none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S2,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S3,     IRL,            sensorI2CCustom)
 #pragma config(Sensor, S4,     IRR,            sensorI2CCustom)
 #pragma config(Motor,  mtr_S1_C1_1,     backLeftMotor, tmotorTetrix, openLoop)
@@ -7,7 +11,7 @@
 #pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_1,     LBoomMotor,    tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_2,     RBoomMotor,    tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_2,     RBoomMotor,    tmotorTetrix, openLoop, reversed)
 #pragma config(Servo,  srvo_S2_C1_1,    camServo1,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_2,    camServo2,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
@@ -18,6 +22,7 @@
 
 #include "joystickdriver.c"
 
+//float factor = .63;
 float factor = .1969;
 
 task main()
@@ -25,10 +30,17 @@ task main()
 	getJoystickSettings(joystick);
 	while(true)
 	{
-		//motor[LBoomMotor] = joystick.joy1_y1 / factor;
-		writeDebugStreamLine("%f", joystick.joy1_y1 / factor);
-		//motor[RBoomMotor] = joystick.joy1_y2 / factor;
-		writeDebugStreamLine("%f", joystick.joy1_y2 / factor);
+	motor[LBoomMotor] = joystick.joy1_y1 * factor;
+	motor[RBoomMotor] = joystick.joy1_y1 * factor;
+	//writeDebugStreamLine("%f", joystick.joy1_y1 / factor);
+	//motor[RBoomMotor] = joystick.joy1_y2 / factor;
+	//writeDebugStreamLine("%f", joystick.joy1_y2 / factor);
 	}
+	/*motor[LBoomMotor] = 80;
+	motor[RBoomMotor] = 80;
+	wait1Msec(500);
+	motor[LBoomMotor] = 0;
+	motor[RBoomMotor] = 0;*/
+
 
 }
