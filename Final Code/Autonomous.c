@@ -22,6 +22,8 @@
 
 //Shoot when the IR beacon reaches a "sweet spot" in front of the IR beacons
 
+//test
+
 #include "hitechnic-irseeker-v2.h"
 #include "JoystickDriver.c"
 #include "BotSystems.h"
