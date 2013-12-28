@@ -2,6 +2,8 @@
 #pragma config(Hubs,  S2, HTServo,  none,     none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S3,     IRL,            sensorI2CCustom)
+#pragma config(Sensor, S4,     IRR,            sensorI2CCustom)
 #pragma config(Motor,  mtr_S1_C1_1,     backLeftMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     frontLeftMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     backRightMotor, tmotorTetrix, openLoop, reversed)
@@ -10,8 +12,8 @@
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_1,     LBoomMotor,    tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_2,     RBoomMotor,    tmotorTetrix, openLoop)
-#pragma config(Servo,  srvo_S2_C1_1,    camServo,             tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_2,    servo2,               tServoNone)
+#pragma config(Servo,  srvo_S2_C1_1,    camServo1,            tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_2,    camServo2,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_5,    servo5,               tServoNone)
@@ -31,15 +33,16 @@ void fire();
 void launch();
 bool armed = false;
 
-/*task main()
+task main()
 {
-	servo[camServo] = 0;
+	servo[camServo1] = 4;
+	servo[camServo2] = 137;
 	wait10Msec(10);
 	while(true)
 	{
 		launch();
 	}
-}*/
+}
 
 void pullBack(int distance, int power)
 {
@@ -54,9 +57,11 @@ void pullBack(int distance, int power)
 
 void fire()																		//Pulses servo to press up cam
 {
-	servo[camServo] = 90;
+	servo[camServo1] = 78;
+	servo[camServo2] = 93;
 	wait10Msec(50);
-	servo[camServo] = 0;
+	servo[camServo1] = 4;
+	servo[camServo2] = 137;
 	armed = false;
 }
 
@@ -64,26 +69,26 @@ void fire()																		//Pulses servo to press up cam
 void launch()																	//This function checks to see if driver wants to load or fire
 {
 	getJoystickSettings(joystick);
-	if(armed == false && joy1Btn(8))						// == Right trigger = button 7 in debuggerwindows
+	//if(armed == false && joy1Btn(8))						// == Right trigger = button 7 in debuggerwindows
+	//{
+	if(joy1Btn(3))														//Button B pressed => FULL POWER!!!/3000
 	{
-		if(joy1Btn(3))														//Button B pressed => FULL POWER!!!/3000
-		{
-			pullBack(3000,100);											//3000 = Pull back distance, 100 = power
-		}
-		if(joy1Btn(4))														//Button Y pressed => medium high power/2300
-		{
-			pullBack(2300,100);
-		}
-		if(joy1Btn(1))														//Button x pressed => medium low power/1500
-		{
-			pullBack(1500,100);
-		}
-		if(joy1Btn(2))														//Button a pressed => low power/1000
-		{
-			pullBack(1000,100);
-		}
+		pullBack(3000,100);											//3000 = Pull back distance, 100 = power
 	}
-	if(joy1Btn(8))															//Fires the servo hit - return when right trigger button pressed again
+	if(joy1Btn(4))														//Button Y pressed => medium high power/2300
+	{
+		pullBack(2300,100);
+	}
+	if(joy1Btn(1))														//Button x pressed => medium low power/1500
+	{
+		pullBack(1500,100);
+	}
+	if(joy1Btn(2))														//Button a pressed => low power/1000
+	{
+		pullBack(1000,100);
+	}
+	//}
+	if(/*armed == true && */joy1Btn(8))															//Fires the servo hit - return when right trigger button pressed again
 	{
 		fire();
 	}
