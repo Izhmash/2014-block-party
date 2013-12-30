@@ -25,7 +25,7 @@
 //test
 
 #include "hitechnic-irseeker-v2.h"
-#include "JoystickDriver.c"
+#include "JoystickDriver.c"  //remove?
 #include "BotSystems.h"
 
 //void holonomicBeepAtIR();
@@ -46,14 +46,17 @@ tHTIRS2DSPMode _mode = DSP_1200;
 
 task main()
 {
+	//waitForStart();
 	getJoystickSettings(joystick);
 	eraseDisplay();
+	initSystems();
 	while(true)
 	{
 		updateSensors();
 		avgDir = getAvgDir();
 		avgStr = getAvgStr(acS3R, acS3L);
 		nxtDisplayCenteredTextLine(3, "%d", "%d", avgDir, avgStr);
+		shootAtIR();
 	}
 
 	//holonomicStopAtIR();
@@ -64,7 +67,7 @@ void shootAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 {
 	//-----------------------------Setup-------------------------------------------------
 	updateSensors();
-	initSystems();
+
 
 	//-----------------------------Moving the Bot--------------------------------------------
 	motor[frontLeftMotor] = 50;
@@ -76,6 +79,8 @@ void shootAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 		pullBack(1500,100);  //load...
 		fire();              //fire
 	}
+	wait1Msec(1000);
+	stopAllMotors();
 }
 
 int getAvgDir()

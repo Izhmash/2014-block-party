@@ -56,8 +56,9 @@ void fire()																		//Pulses servo to press up cam
 void initSystems()
 {
 	servo[camServo1] = 0;
-	nMotorEncoder[LBoomMotor] = 0;
-	nMotorEncoder[RBoomMotor] = 0;
+	//nMotorEncoder[LBoomMotor] = 0;
+	//nMotorEncoder[RBoomMotor] = 0;
+	nMotorEncoder[M4Motor] = 0;
 }
 
 void stopAllMotors()

@@ -22,9 +22,9 @@
 
 #include "joystickdriver.c"
 
-//float factor = -.63;
-//float factor = -.1969;
-float factor = -1.27;
+//float factor = .63;
+//float factor = .1969;
+float factor = 1.27;
 
 
 task main()

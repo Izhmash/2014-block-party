@@ -35,8 +35,8 @@ bool armed = false;
 
 task main()
 {
-	servo[camServo1] = 4;
-	servo[camServo2] = 137;
+	servo[camServo1] = 85;
+	//servo[camServo2] = 137;
 	wait10Msec(10);
 	while(true)
 	{
@@ -57,11 +57,11 @@ void pullBack(int distance, int power)
 
 void fire()																		//Pulses servo to press up cam
 {
-	servo[camServo1] = 78;
-	servo[camServo2] = 93;
+	servo[camServo1] = 153;
+	//servo[camServo2] = 93;
 	wait10Msec(50);
-	servo[camServo1] = 4;
-	servo[camServo2] = 137;
+	servo[camServo1] = 85;
+	//servo[camServo2] = 137;
 	armed = false;
 }
 
