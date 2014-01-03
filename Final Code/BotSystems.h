@@ -27,7 +27,7 @@
 
 #include "JoystickDriver.c"
 
-void pullBack(int distance,int power);
+void pullBack(int distance);
 void fire();
 void stopAllMotors();
 void initSystems();
@@ -37,12 +37,12 @@ bool armed = false;
 //Load: Press a button on the right low-to-high(a,x,y,b) then press the right trigger to load to power
 //Fire!: Press right trigger again to fire
 
-void pullBack(int distance, int power)
+void pullBack(int distance)
 {
 	nMotorEncoder[M4Motor] = 0;          			// reset the Motor Encoder of PULLBACK
 	while(nMotorEncoder[M4Motor] < distance)  // while the Motor Encoder of Motor B has not yet reached 360 counts:
 	{
-		motor[M4Motor] = power;                 //M4Motor is given a power level of power
+		motor[M4Motor] = 100;                 //M4Motor at 100 power
 	}
 	motor[M4Motor] = 0;												// M4Motor is given a power level of 0 (stop)
 	armed = true;

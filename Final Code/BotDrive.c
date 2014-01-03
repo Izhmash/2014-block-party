@@ -68,19 +68,19 @@ task main()
 
 		if(joy1Btn(3))														//Button B pressed => FULL POWER!!!/3000
 		{
-			pullBack(3000,100);											//3000 = Pull back distance, 100 = power
+			pullBack(3000);											//3000 = Pull back distance
 		}
 		if(joy1Btn(4))														//Button Y pressed => medium high power/2300
 		{
-			pullBack(2300,100);
+			pullBack(2300);
 		}
 		if(joy1Btn(1))														//Button x pressed => medium low power/1500
 		{
-			pullBack(1500,100);
+			pullBack(1500);
 		}
 		if(joy1Btn(2))														//Button a pressed => low power/1000
 		{
-			pullBack(1000,100);
+			pullBack(1000);
 		}
 		//}
 		if(/*armed == true && */joy1Btn(8))															//Fires the servo hit - return when right trigger button pressed again

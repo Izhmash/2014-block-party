@@ -78,7 +78,7 @@ void shootAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 	motor[backRightMotor] = -50;
 	if(getAvgDir() == 5 && getAvgStr(acS3R, acS3L) > 40)  //change to zone 4?
 	{
-		pullBack(1500,100);  //load...
+		pullBack(1500);      //load...
 		fire();              //fire
 	}
 	wait1Msec(1000);
