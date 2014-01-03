@@ -118,7 +118,7 @@ task main()
 		}
 		//---------------------------------------Extras---------------------------------------------
 
-		if(joy1Btn(9)) stopAllMotors();
+		if(joy1Btn(10)) stopAllMotors();
 
 		wait1Msec(100);
 	}
