@@ -5,15 +5,15 @@
 #pragma config(Sensor, S3,     IRL,            sensorI2CCustom)
 #pragma config(Sensor, S4,     IRR,            sensorI2CCustom)
 #pragma config(Motor,  motorA,          magLeft,       tmotorNXT, PIDControl, encoder)
-#pragma config(Motor,  motorB,          magRight,      tmotorNXT, PIDControl, encoder, reversed)
-#pragma config(Motor,  mtr_S1_C4_1,     backLeftMotor, tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_2,     frontLeftMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  motorB,          magRight,      tmotorNXT, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     backRightMotor, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C1_2,     frontRightMotor, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C2_1,     M4Motor,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     LBoomMotor,    tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     RBoomMotor,    tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_1,     backLeftMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_2,     frontLeftMotor, tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S2_C1_1,    camServo1,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_2,    camServo2,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
@@ -100,7 +100,7 @@ task main()
 			mag = OUT;
 		if(joy1Btn(5) && joy1Btn(6))
 			mag = STOP;
-	
+
 		if(mag == IN)
 		{
 			motor[magLeft] = 100;
