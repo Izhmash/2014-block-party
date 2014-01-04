@@ -58,32 +58,32 @@ task main()
 
 		//--------------------------------------Flag-----------------------------------------------
 
-		if(joy1Btn(6))
+		if(joy1Btn(8))
 			motor[flagMotor] = 100;
-		else if(joy1Btn(5))
+		else if(joy1Btn(7))
 			motor[flagMotor] = -100;
 		else motor[flagMotor] = 0;
 
 		//---------------------------------------M4---------------------------------------------------
 
-		if(joy1Btn(3))														//Button B pressed => FULL POWER!!!/3000
+		if(joy2Btn(3))														//Button B pressed => FULL POWER!!!/3000
 		{
 			pullBack(3000);											//3000 = Pull back distance
 		}
-		if(joy1Btn(4))														//Button Y pressed => medium high power/2300
+		if(joy2Btn(4))														//Button Y pressed => medium high power/2300
 		{
 			pullBack(2300);
 		}
-		if(joy1Btn(1))														//Button x pressed => medium low power/1500
+		if(joy2Btn(1))														//Button x pressed => medium low power/1500
 		{
 			pullBack(1500);
 		}
-		if(joy1Btn(2))														//Button a pressed => low power/1000
+		if(joy2Btn(2))														//Button a pressed => low power/1000
 		{
 			pullBack(1000);
 		}
 		//}
-		if(joy1Btn(8))															//Fires the servo hit - return when right trigger button pressed again
+		if(joy2Btn(8))															//Fires the servo hit - return when right trigger button pressed again
 		{
 			fire();
 		}
@@ -94,11 +94,11 @@ task main()
 
 		//---------------------------------------Magazine-------------------------------------------
 
-		if(joy1Btn(6))
+		if(joy1Btn(6) || joy2Btn(6))
 			mag = IN;
-		if(joy1Btn(5))
+		if(joy1Btn(5) || joy2Btn(5))
 			mag = OUT;
-		if(joy1Btn(5) && joy1Btn(6))
+		if(joy1Btn(5) && joy1Btn(6) || joy2Btn(5) && joy2Btn(6))
 			mag = STOP;
 
 		if(mag == IN)
@@ -118,7 +118,7 @@ task main()
 		}
 		//---------------------------------------Extras---------------------------------------------
 
-		if(joy1Btn(10)) stopAllMotors();
+		if(joy1Btn(10) || joy2Btn(10)) stopAllMotors();
 
 		wait1Msec(100);
 	}
