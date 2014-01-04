@@ -8,7 +8,7 @@
 #pragma config(Motor,  motorB,          magRight,      tmotorNXT, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     backRightMotor, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C1_2,     frontRightMotor, tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C2_1,     M4Motor,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C2_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     LBoomMotor,    tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     RBoomMotor,    tmotorTetrix, openLoop)
@@ -64,7 +64,7 @@ task main()
 			motor[flagMotor] = -100;
 		else motor[flagMotor] = 0;
 
-		//---------------------------------------M4----------------------------------------------------
+		//---------------------------------------M4---------------------------------------------------
 
 		if(joy1Btn(3))														//Button B pressed => FULL POWER!!!/3000
 		{
@@ -83,7 +83,7 @@ task main()
 			pullBack(1000);
 		}
 		//}
-		if(/*armed == true && */joy1Btn(8))															//Fires the servo hit - return when right trigger button pressed again
+		if(joy1Btn(8))															//Fires the servo hit - return when right trigger button pressed again
 		{
 			fire();
 		}
@@ -92,7 +92,7 @@ task main()
 		motor[LBoomMotor] = joystick.joy2_y1 * factor;
 		motor[RBoomMotor] = joystick.joy2_y1 * factor;
 
-		//---------------------------------------Magazine------------------------------------------
+		//---------------------------------------Magazine-------------------------------------------
 
 		if(joy1Btn(6))
 			mag = IN;

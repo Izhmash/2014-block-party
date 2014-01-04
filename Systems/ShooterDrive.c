@@ -35,8 +35,8 @@ bool armed = false;
 
 task main()
 {
-	servo[camServo1] = 85;
-	//servo[camServo2] = 137;
+	servo[camServo1] = 76;
+	servo[camServo2] = 128;
 	wait10Msec(10);
 	while(true)
 	{
@@ -57,14 +57,14 @@ void pullBack(int distance, int power)
 
 void fire()																		//Pulses servo to press up cam
 {
-	servo[camServo1] = 153;
-	//servo[camServo2] = 93;
+	servo[camServo1] = 156;
+	servo[camServo2] = 48;
 	wait10Msec(50);
-	servo[camServo1] = 85;
-	//servo[camServo2] = 137;
+	servo[camServo1] = 76;
+	servo[camServo2] = 128;
 	armed = false;
 }
-
+//delta = 62
 // x = 1, a = 2, b = 3, y = 4, trigger = 7
 void launch()																	//This function checks to see if driver wants to load or fire
 {
