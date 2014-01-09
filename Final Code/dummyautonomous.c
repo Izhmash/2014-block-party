@@ -31,5 +31,5 @@ task main()
 {
   waitForStart();
   PlaySound(soundBeepBeep);
-  wait1Msec(1000);
+  wait1Msec(10000);
 }
