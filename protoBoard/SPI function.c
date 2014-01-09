@@ -5,45 +5,69 @@
 
 This is a function that can be used to shift out (via spi) a byte to a device
 */
+#define CSA_PIN 0x04		//Pull down when sending data to device
+#define SDI_PIN 0x02		//Set to digital value you want to send
+#define SCK_PIN 0x01		//Clock high then low when data is set
+int sevenSeg[] =
+{0x3F,0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x5F, 0x7C, 0x58, 0x5E, 0x7B, 0x71 };
+/*
+000
+|||-Clock pin
+||
+||--Data pin
+|
+|---Chip select pin
+Manually need to set CSA pin outside of function EXAMPLE
+HTSPBwriteIO(HTSPB, 0x00);
+shiftOut(0x45);
+shiftOut(0x6A);
+HTSPBwriteIO(HTSPB, CSA_PIN);						//Set chip select pin high when not sending data!!
+*/
 void shiftOut(byte data);
-
+int x;
 
 
 #include "hitechnic-superpro.h"
 
 task main()
 {
-	/*
-	000
-	|||-Clock pin
-	||
-	||--Data pin
-	|
-	|---Chip select pin
-	*/
-	HTSPBsetupIO(HTSPB, 0x07);					//Sets digital pins 0,1,2	to outputs
-	HTSPBwriteIO(HTSPB, 0x04);					//Sets pin 3 high -- chip select pin	== 0000 0100
+	HTSPBsetupIO(HTSPB,CSA_PIN | SDI_PIN | SCK_PIN);
+	while(true)
+	{
+		for(x = 0; x < 16;x++)
+		{
+			HTSPBwriteIO(HTSPB, 0x00);
+			shiftOut(sevenSeg[x]);
+			shiftOut(sevenSeg[x]);
+			HTSPBwriteIO(HTSPB, CSA_PIN);					//Set chip select pin high when not sending data!!
+			wait10Msec(100);
+		}
+		HTSPBwriteIO(HTSPB, 0x00);
+		shiftOut(0x6B);
+		shiftOut(0xEB);
+		HTSPBwriteIO(HTSPB, CSA_PIN);
+		wait10Msec(200);
+	}
 }
-void shiftOut(byte data)							//Function shifts out 1 byte
+void shiftOut(byte data)								//Function shifts out 1 byte
 {
 	int i;
-	HTSPBwriteIO(HTSPB, 0x01);						//Sets pin 3 low-- chip selected start data shifting, set clock high == 0000 0001
 	for(i = 0; i < 8; i++)
 	{
-		if((data & 0x80) == 1)							//If MSB masked with 0x80 == 1 then data = 1, clock = 0
+		if(data & 0x80)							//If MSB masked with 0x80 == 1 then data = 1
 		{
-			HTSPBwriteIO(HTSPB, 0x03);				//Sets data high == 0000 0011
+			HTSPBwriteIO(HTSPB, SDI_PIN);			//Data high
 			wait1Msec(1);
-			HTSPBwriteIO(HTSPB, 0x02);				//Sets data high clock low == 0000 0010
+			HTSPBwriteIO(HTSPB, SDI_PIN | SCK_PIN);	//Clock high
 		}
-		else
+		else																//If MSB masked with 0x80 == 0 then data = 0
 		{
-			HTSPBwriteIO(HTSPB, 0x01);				//Sets data low
+			HTSPBwriteIO(HTSPB, 0x00);				//Data low
 			wait1Msec(1);
-			HTSPBwriteIO(HTSPB, 0x00);				//Clock low
+			HTSPBwriteIO(HTSPB, SCK_PIN);			//Clock high
 		}
-		HTSPBwriteIO(HTSPB, 0x01);					//Clock high
-		data = data <<2;
+		wait1Msec(1);
+		HTSPBwriteIO(HTSPB, 0x00);					//Clock low
+		data = data<<1;										//Shift over to get next MSB bit
 	}
-	HTSPBwriteIO(HTSPB, 0x04);						//Chip select high end of data transfer
 }
