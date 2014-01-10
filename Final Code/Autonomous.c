@@ -26,7 +26,7 @@
 
 //test
 
-#include "hitechnic-irseeker-v2.h"
+#include "..\Driver Suite\drivers\hitechnic-irseeker-v2.h"
 #include "JoystickDriver.c"  //remove?
 #include "BotSystems.h"
 
