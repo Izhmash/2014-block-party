@@ -27,7 +27,7 @@
 //test
 
 #include "..\Driver Suite\drivers\hitechnic-irseeker-v2.h"
-#include "JoystickDriver.c"  //remove?
+//#include "JoystickDriver.c"  //remove?
 #include "BotSystems.h"
 
 //void holonomicBeepAtIR();
@@ -42,23 +42,31 @@ int _dirACL;
 int _dirACR;
 int acS1L, acS2L, acS3L, acS4L, acS5L;
 int acS1R, acS2R, acS3R, acS4R, acS5R;
-int avgDir, avgStr;
+int avgDir, avgStr1, avgStr2, avgStr3, avgStr4, avgStr5;
 
 tHTIRS2DSPMode _mode = DSP_1200;
 
 task main()
 {
 	//waitForStart();
-	getJoystickSettings(joystick);
-	eraseDisplay();
+	//getJoystickSettings(joystick);
+	//eraseDisplay();
+	//eraseDisplay();
 	initSystems();
 	while(true)
 	{
+		//eraseDisplay();
 		updateSensors();
 		avgDir = getAvgDir();
-		avgStr = getAvgStr(acS3R, acS3L);
-		nxtDisplayCenteredTextLine(3, "%d", "%d", avgDir, avgStr);
-		shootAtIR();
+		avgStr1 = getAvgStr(acS1R, acS1L);
+		avgStr2 = getAvgStr(acS2R, acS2L);
+		avgStr3 = getAvgStr(acS3R, acS3L);
+		avgStr4 = getAvgStr(acS4R, acS4L);
+		avgStr5 = getAvgStr(acS3R, acS5L);
+		//nxtDisplayCenteredTextLine(3, "%d", "%d", avgDir, avgStr);
+		nxtDisplayCenteredTextLine(3, "%d", avgStr3);
+		nxtDisplayCenteredTextLine(4, "%d", avgDir);
+		//shootAtIR();
 	}
 
 	//holonomicStopAtIR();
@@ -69,7 +77,7 @@ void shootAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 {
 	//-----------------------------Setup-------------------------------------------------
 	updateSensors();
-
+  pullBack(1500);      //load...
 
 	//-----------------------------Moving the Bot--------------------------------------------
 	motor[frontLeftMotor] = 50;
@@ -78,9 +86,9 @@ void shootAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 	motor[backRightMotor] = -50;
 	if(getAvgDir() == 5 && getAvgStr(acS3R, acS3L) > 40)  //change to zone 4?
 	{
-		pullBack(1500);      //load...
 		fire();              //fire
 	}
+
 	wait1Msec(1000);
 	stopAllMotors();
 }

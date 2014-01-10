@@ -119,6 +119,7 @@ task main()
 		//---------------------------------------Extras---------------------------------------------
 
 		if(joy1Btn(10) || joy2Btn(10)) stopAllMotors();
+		//PlayTone((rand() % (700-500)) + 500, 5);     //rand() % (max-min)) + min;
 
 		wait1Msec(100);
 	}
