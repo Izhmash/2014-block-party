@@ -73,6 +73,9 @@ task main()
 	//shootAtIR();
 }
 
+/*
+Moves past the crates, stops and fires at the IR crate.
+*/
 void shootAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 {
 	//-----------------------------Setup-------------------------------------------------
@@ -86,23 +89,34 @@ void shootAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 	motor[backRightMotor] = -50;
 	if(getAvgDir() == 5 && getAvgStr(acS3R, acS3L) > 40)  //change to zone 4?
 	{
+		stopAllMotors();
 		fire();              //fire
 	}
 
 	wait1Msec(1000);
-	stopAllMotors();
+	//stopAllMotors();
 }
 
+/*
+Gets the average direction from the two IR sensors
+*/
 int getAvgDir()
 {
 	return (_dirACL + _dirACR) / 2;
 }
 
+/*
+Parameters: (right IR strength direction, left IR strength directoin
+Gets the average of two IR strength directions, each from a different IR sensor
+*/
 int getAvgStr(int acSXR, int acSXL)
 {
 	return (acSXR + acSXL) / 2;
 }
 
+/*
+Updates sensor information
+*/
 void updateSensors()
 {
 	HTIRS2setDSPMode(IRL, _mode);
@@ -114,80 +128,3 @@ void updateSensors()
 	HTIRS2readAllACStrength(IRL,  acS1L,  acS2L,  acS3L,  acS4L,  acS5L);
 	HTIRS2readAllACStrength(IRR,  acS1R,  acS2R,  acS3R,  acS4R,  acS5R);
 }
-
-
-
-
-
-/*void trackIR()
-{
-//-----------------------------IR Setup-------------------------------------------------
-HTIRS2setDSPMode(IRL, _mode);
-HTIRS2setDSPMode(IRR, _mode);
-
-_dirACL = HTIRS2readACDir(IRL);
-_dirACR = HTIRS2readACDir(IRR);
-
-HTIRS2readAllACStrength(IRL,  acS1L,  acS2L,  acS3L,  acS4L,  acS5L);
-HTIRS2readAllACStrength(IRR,  acS1R,  acS2R,  acS3R,  acS4R,  acS5R);
-
-int temp = 0;
-
-for(int i = 0; i < 10; i++)
-{
-temp += _dirACL + _dirACR;
-}
-
-avgDir = temp / 20;
-
-//-----------------------------Moving the Bot--------------------------------------------
-if(avgDir < 5)
-{
-if(avgDir < 4)
-{
-motor[frontLeft] = -50;
-motor[frontRight] = 50;
-motor[backLeft] = 50;
-motor[backRight] = -50;
-}
-else  //avgDir == 4
-{
-motor[frontLeft] = 0;
-motor[frontRight] = 50;
-motor[backLeft] = -50;
-motor[backRight] = 0;
-}
-}
-else if(avgDir > 5)
-{
-if(avgDir > 6)
-{
-motor[frontLeft] = 50;
-motor[frontRight] = -50;
-motor[backLeft] = -50;
-motor[backRight] = 50;
-}
-else  //avgDir == 6
-{
-motor[frontLeft] = 50;
-motor[frontRight] = 0;
-motor[backLeft] = 0;
-motor[backRight] = -50;
-}
-}
-else  //avgDir == 5
-{
-motor[frontLeft] = 50;
-motor[frontRight] = 50;
-motor[backLeft] = -50;
-motor[backRight] = -50;
-}
-}*/
-
-/*void stopAllMotors()
-{
-motor[frontLeft] = 0;
-motor[frontRight] = 0;
-motor[backLeft] = 0;
-motor[backRight] = 0;
-}*/
