@@ -4,6 +4,7 @@
 #pragma config(Sensor, S2,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S3,     IRL,            sensorI2CCustom)
 #pragma config(Sensor, S4,     IRR,            sensorI2CCustom)
+#pragma config(Motor,  motorA,          motor1,        tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     backLeftMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     frontLeftMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     backRightMotor, tmotorTetrix, openLoop, reversed)
@@ -26,15 +27,30 @@
 //float factor = .1969;
 float factor = 1.27;
 
+int e;
 
 task main()
 {
+	eraseDisplay();
+	nMotorEncoder[motor1] = 0;
 	getJoystickSettings(joystick);
 	while(true)
 	{
+
+		bFloatDuringInactiveMotorPWM = false;
+		nxtDisplayCenteredBigTextLine(4, "%d", nMotorEncoder[motor1]);
+		if(joy1Btn(6))
+		{
+			motor[motor1] = -100;
+		}
+		if(nMotorEncoder[motor1] < -10)
+		{
+			motor[motor1] = 0;
+			nMotorEncoder[motor1] = 0;
+		}
 		//motor[M4Motor] = joystick.joy1_y1 / factor;
-		motor[LBoomMotor] = joystick.joy1_y1 / factor;
-		motor[RBoomMotor] = joystick.joy1_y1 / factor;
+		//motor[LBoomMotor] = joystick.joy1_y1 / factor;
+		//motor[RBoomMotor] = joystick.joy1_y1 / factor;
 		//writeDebugStreamLine("%f", joystick.joy1_y1 / factor);
 		//motor[RBoomMotor] = joystick.joy1_y2 / factor;
 		//writeDebugStreamLine("%f", joystick.joy1_y2 / factor);

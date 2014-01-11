@@ -1,5 +1,7 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTServo)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Motor,  motorA,          motor1, tmotorNXT, PIDControl, encoder)
+#pragma config(Motor,  motorB,          motor2, tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     backLeftMotor, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C1_2,     frontLeftMotor, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C2_1,     backRightMotor, tmotorTetrix, openLoop, reversed)
@@ -20,14 +22,17 @@ int e;
 
 task main()
 {
-	bFloatDuringInactiveMotorPWM = false;
 	eraseDisplay();
 	getJoystickSettings(joystick);
-	nMotorEncoder[flagMotor] = 0;
+	nMotorEncoder[motor1] = 0;
 	while(true)
 	{
-		motor[flagMotor] = joystick.joy1_y2 / 1.27;
-		e = nMotorEncoder[flagMotor];
+		bFloatDuringInactiveMotorPWM = true;
+		e = nMotorEncoder[motor1];
 		nxtDisplayCenteredBigTextLine(4, "%d", e);
+		//bFloatDuringInactiveMotorPWM = false;
+
+		motor[motor1] = joystick.joy1_y2 / 1.27;
+
 	}
 }
