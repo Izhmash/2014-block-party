@@ -29,25 +29,55 @@ float factor = 1.27;
 
 int e;
 
+task OpenGate();
+
 task main()
 {
-	eraseDisplay();
 	nMotorEncoder[motor1] = 0;
+	while(true)
+	{
+		getJoystickSettings(joystick);
+		if(nMotorEncoder[motor1] > 180 || nMotorEncoder[motor1] < -180) nMotorEncoder[motor1] = 0;
+		//e = nMotorEncoder[motor1];
+		//e = nMotorEncoder[motor1];
+		nxtDisplayCenteredBigTextLine(4, "%d", nMotorEncoder[motor1]);
+		if(/*joystick.joy1_y1 > 1*/ nNxtButtonPressed == 3)
+			StartTask(OpenGate, 7);
+		while(joy1Btn(1))
+		{
+			motor[motor1] = joystick.joy1_y1 / 1.27;
+			nxtDisplayCenteredBigTextLine(4, "%d", nMotorEncoder[motor1]);
+			if(nMotorEncoder[motor1] > 180 || nMotorEncoder[motor1] < -180) nMotorEncoder[motor1] = 0;
+		}
+	}
+}
+
+task OpenGate()
+{
+	eraseDisplay();
+	//nMotorEncoder[motor1] = e;
 	getJoystickSettings(joystick);
 	while(true)
 	{
-
+		if(nMotorEncoder[motor1] > 180 || nMotorEncoder[motor1] < -180) nMotorEncoder[motor1] = 0;
 		bFloatDuringInactiveMotorPWM = false;
 		nxtDisplayCenteredBigTextLine(4, "%d", nMotorEncoder[motor1]);
-		if(joy1Btn(6))
+
+		//if(/*joystick.joy1_y1 > 1*/ nNxtButtonPressed == 3)
+		//{
+		if(nMotorEncoder[motor1] > 30)
 		{
-			motor[motor1] = -100;
+			motor[motor1] = -20;
 		}
-		if(nMotorEncoder[motor1] < -10)
+		else if(nMotorEncoder[motor1] < -30)
+		{
+			motor[motor1] = 20;
+		}
+		else
 		{
 			motor[motor1] = 0;
-			nMotorEncoder[motor1] = 0;
 		}
+		//}
 		//motor[M4Motor] = joystick.joy1_y1 / factor;
 		//motor[LBoomMotor] = joystick.joy1_y1 / factor;
 		//motor[RBoomMotor] = joystick.joy1_y1 / factor;
@@ -60,6 +90,4 @@ task main()
 	wait1Msec(500);
 	motor[LBoomMotor] = 0;
 	motor[RBoomMotor] = 0;*/
-
-
 }
