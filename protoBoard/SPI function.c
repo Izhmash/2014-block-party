@@ -9,13 +9,13 @@ This is a function that can be used to shift out (via spi) a byte to a device
 #define SDI_PIN 0x02		//Set to digital value you want to send
 #define SCK_PIN 0x01		//Clock high then low when data is set
 int sevenSeg[] =
-{0x3F,0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x5F, 0x7C, 0x58, 0x5E, 0x7B, 0x71 };
+{0x3F,0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x5F, 0x7C, 0x58, 0x5E, 0x7B, 0x71 };  //Characters for hex values
 //0	1    2      3     4     5     6     7    8     9     a      b     c     d    e      f
 int ttns[]=
-{0x4F,0x00,0x4F,0x00,0x6F,0x00,0x07,0x00};
+{0x4F,0x00,0x4F,0x00,0x6F,0x00,0x07,0x00}; //Three Three Nine Seven Flasher
 //3	     3        9         7
 int loading[]=
-{0x10,0x00,0x20,0x00,0x01,0x00,0x00,0x01,0x00,0x02,0x00,0x04,0x00,0x08,0x08,0x00};
+{0x00,0x10,0x00,0x20,0x00,0x01,0x01,0x00,0x02,0x00,0x04,0x00,0x08,0x00,0x00,0x08}; //Bars around the display for loading
 
 /*
 000
@@ -32,7 +32,7 @@ HTSPBwriteIO(HTSPB, CSA_PIN);						//Set chip select pin high when not sending d
 */
 void shiftOut(byte data);
 int x;
-
+int y;
 
 #include "hitechnic-superpro.h"
 
@@ -41,19 +41,50 @@ task main()
 	HTSPBsetupIO(HTSPB,CSA_PIN | SDI_PIN | SCK_PIN);
 	while(true)
 	{
-		for(x = 0; x < 16;x++)
+			for(x = 0; x < 16;x++)
 		{
-			HTSPBwriteIO(HTSPB, 0x00);
-			shiftOut(sevenSeg[x]);
-			shiftOut(sevenSeg[x]);
-			HTSPBwriteIO(HTSPB, CSA_PIN);					//Set chip select pin high when not sending data!!
-			wait10Msec(100);
+		HTSPBwriteIO(HTSPB, 0x00);
+		shiftOut(sevenSeg[x]);
+		shiftOut(sevenSeg[x]);
+		HTSPBwriteIO(HTSPB, CSA_PIN);					//Set chip select pin high when not sending data!!
+		wait10Msec(100);
 		}
 		HTSPBwriteIO(HTSPB, 0x00);
 		shiftOut(0x6B);
 		shiftOut(0xEB);
 		HTSPBwriteIO(HTSPB, CSA_PIN);
 		wait10Msec(200);
+		
+		for(y = 0; y < 4;y++)
+		{
+			for(x = 0; x < sizeof(ttns)/2;x++)
+			{
+				HTSPBwriteIO(HTSPB, 0x00);
+				shiftOut(ttns[x]);
+				shiftOut(ttns[x]);
+				HTSPBwriteIO(HTSPB, CSA_PIN);					//Set chip select pin high when not sending data!!
+				wait10Msec(10);
+			}
+			wait10Msec(200);
+		}
+		
+	
+
+		for(y = 0; y < 4;y++)
+		{
+			for(x = 0; x < sizeof(loading)/2 ;x+=2)
+			{
+				HTSPBwriteIO(HTSPB, 0x00);
+				shiftOut(loading[x]);
+				shiftOut(loading[x+1]);
+				HTSPBwriteIO(HTSPB, CSA_PIN);					//Set chip select pin high when not sending data!!
+			
+			}
+		}
+
+
+
+
 	}
 }
 void shiftOut(byte data)								//Function shifts out 1 byte
