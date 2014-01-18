@@ -34,6 +34,7 @@
 //void trackIR();
 //void stopAllMotors();
 void updateSensors();
+void moveOut();
 void shootAtIR();
 int getAvgDir();
 int getAvgStr(int acSXR, int acSXL);
@@ -51,26 +52,25 @@ task main()
 	//waitForStart();
 	//getJoystickSettings(joystick);
 	//eraseDisplay();
-	//eraseDisplay();
 	initSystems();
-	while(true)
+	/*while(true)
 	{
-		//eraseDisplay();
-		updateSensors();
-		avgDir = getAvgDir();
-		avgStr1 = getAvgStr(acS1R, acS1L);
-		avgStr2 = getAvgStr(acS2R, acS2L);
-		avgStr3 = getAvgStr(acS3R, acS3L);
-		avgStr4 = getAvgStr(acS4R, acS4L);
-		avgStr5 = getAvgStr(acS3R, acS5L);
-		//nxtDisplayCenteredTextLine(3, "%d", "%d", avgDir, avgStr);
-		nxtDisplayCenteredTextLine(3, "%d", avgStr3);
-		nxtDisplayCenteredTextLine(4, "%d", avgDir);
-		//shootAtIR();
-	}
-
-	//holonomicStopAtIR();
+	//eraseDisplay();
+	updateSensors();
+	avgDir = getAvgDir();
+	avgStr1 = getAvgStr(acS1R, acS1L);
+	avgStr2 = getAvgStr(acS2R, acS2L);
+	avgStr3 = getAvgStr(acS3R, acS3L);
+	avgStr4 = getAvgStr(acS4R, acS4L);
+	avgStr5 = getAvgStr(acS3R, acS5L);
+	//nxtDisplayCenteredTextLine(3, "%d", "%d", avgDir, avgStr);
+	nxtDisplayCenteredTextLine(3, "%d", avgStr3);
+	nxtDisplayCenteredTextLine(4, "%d", avgDir);
 	//shootAtIR();
+	moveOut();
+	}*/
+	//moveOut();
+	shootAtIR();
 }
 
 /*
@@ -80,21 +80,46 @@ void shootAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 {
 	//-----------------------------Setup-------------------------------------------------
 	updateSensors();
-  pullBack(1500);      //load...
+	//pullBack(1500);      //load...
 
 	//-----------------------------Moving the Bot--------------------------------------------
-	motor[frontLeftMotor] = 50;
-	motor[frontRightMotor] = 50;
-	motor[backLeftMotor] = -50;
-	motor[backRightMotor] = -50;
-	if(getAvgDir() == 5 && getAvgStr(acS3R, acS3L) > 40)  //change to zone 4?
+
+	while(true)
 	{
-		stopAllMotors();
-		fire();              //fire
+
+		if(getAvgDir() > 5)  //turn right
+		{
+			motor[frontLeftMotor] = -50;
+			motor[frontRightMotor] = -50;
+			motor[backLeftMotor] = -50;
+			motor[backRightMotor] = -50;
+		}
+		else if(getAvgDir() < 5)
+		{
+			motor[frontLeftMotor] = -50;
+			motor[frontRightMotor] = -50;
+			motor[backLeftMotor] = -50;
+			motor[backRightMotor] = -50;
+		}
+		else
+		{
+			stopAllMotors();
+			return;
+		}
 	}
 
 	wait1Msec(1000);
 	//stopAllMotors();
+}
+
+void moveOut()
+{
+	motor[frontLeftMotor] = 50;
+	motor[frontRightMotor] = 50;
+	motor[backLeftMotor] = -50;
+	motor[backRightMotor] = -50;
+	wait1Msec(3000);
+	stopAllMotors();
 }
 
 /*
