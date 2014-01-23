@@ -25,7 +25,10 @@
 
 //test
 
+
 #include "JoystickDriver.c"
+#include "hitechnic-eopd.h"
+#include "hitechnic-superpro.h"
 
 void pullBack(int distance);
 void fire();
@@ -75,3 +78,39 @@ void stopAllMotors()
 	motor[backRightMotor] = 0;
 	motor[flagMotor] = 0;
 }
+/*
+shiftOut function shifts out bytes using SDI and SCK pins -- manually before and after shiftOut set CSA pin 
+
+HTSPBwriteIO(HTSPB, 0x00);					//CSA low
+shiftOut(sevenSeg[LSD]);					//Shift out least significant digit
+shiftOut(sevenSeg[MSD]);					//Shift out most significant digit
+HTSPBwriteIO(HTSPB, CSA_PIN);					//CSA high
+
+PROTOBOARD:
+
+
+
+*/
+void shiftOut(byte data)						//Function shifts out 1 byte  
+{
+	int i;
+	for(i = 0; i < 8; i++)
+	{
+		if(data & 0x80)					        //If MSB masked with 0x80, then data = 1
+		{
+			HTSPBwriteIO(HTSPB, SDI_PIN);			//Data high
+			wait1Msec(1);
+			HTSPBwriteIO(HTSPB, SDI_PIN | SCK_PIN);		//Clock high
+		}
+		else							//If MSB masked with 0x80 == 0 then data = 0
+		{
+			HTSPBwriteIO(HTSPB, 0x00);			//Data low
+			wait1Msec(1);
+			HTSPBwriteIO(HTSPB, SCK_PIN);			//Clock high
+		}
+		wait1Msec(1);
+		HTSPBwriteIO(HTSPB, 0x00);				//Clock low
+		data = data<<1;						//Shift over to get next MSB bit
+	}
+}
+
