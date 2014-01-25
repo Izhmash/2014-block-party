@@ -10,10 +10,10 @@
 #pragma config(Motor,  mtr_S1_C1_2,     frontRightMotor, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C2_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C2_2,     flagMotor,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_1,     LBoomMotor,    tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_2,     RBoomMotor,    tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C4_1,     backLeftMotor, tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_2,     frontLeftMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_1,     LBoomMotor,    tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_2,     RBoomMotor,    tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C3_1,     backLeftMotor, tmotorTetrix, openLoop)   //change back to C4
+#pragma config(Motor,  mtr_S1_C3_2,     frontLeftMotor, tmotorTetrix, openLoop)  //change back to C4
 #pragma config(Servo,  srvo_S4_C1_1,    camServo1,            tServoStandard)
 #pragma config(Servo,  srvo_S4_C1_2,    camServo2,            tServoStandard)
 #pragma config(Servo,  srvo_S4_C1_3,    servo3,               tServoNone)
