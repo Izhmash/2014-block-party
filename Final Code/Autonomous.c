@@ -35,7 +35,7 @@
 //void stopAllMotors();
 void updateSensors();
 void moveOut();
-void shootAtIR();
+void aimAtIR();
 void turnLeft();
 void turnRight();
 void strafeLeft();
@@ -72,17 +72,17 @@ task main()
 		//nxtDisplayCenteredTextLine(3, "%d", "%d", avgDir, avgStr);
 		nxtDisplayCenteredTextLine(3, "%d", avgStr3);
 		nxtDisplayCenteredTextLine(4, "%d", avgDir);
-		//shootAtIR();
+		//aimAtIR();
 		//moveOut();
 	}*/
 	//moveOut();
-	shootAtIR();
+	aimAtIR();
 }
 
 /*
-Moves past the crates, stops and fires at the IR crate.
+Points at the IR crate
 */
-void shootAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
+void aimAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 {
 	//-----------------------------Setup-------------------------------------------------
 	updateSensors();
@@ -93,33 +93,27 @@ void shootAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 	while(true)
 	{
 		updateSensors();
-		/*if(getAvgDir() > 5)  //turn right
-		{
-		motor[frontLeftMotor] = -10;
-		motor[frontRightMotor] = -10;
-		motor[backLeftMotor] = -10;
-		motor[backRightMotor] = -10;
-		}
-		else if(getAvgDir() < 5)
-		{
-		motor[frontLeftMotor] = 10;
-		motor[frontRightMotor] = 10;
-		motor[backLeftMotor] = 10;
-		motor[backRightMotor] = 10;
-		}
-		else
-		{
-		stopAllMotors();
-		return;
-		}*/
 		if(_dirACL == 5 && _dirACR == 5) /*stopAllMotors();*/ return;
 		else if(avgLeftStr < 15 && avgRightStr < 15) turnLeft();
 		else if(avgLeftStr > avgRightStr) turnLeft();
 		else/*(avgLeftStr < avgRightStr)*/ turnRight();
 	}
-
-	wait1Msec(1000);
 	//stopAllMotors();
+}
+
+/*
+Moves foward until d units of IR strength units has been reached (sector 3)
+*/
+void approachIR(int d)
+{
+	int distance = 0;
+	int temp = 0;
+	while(distance < d)
+	{
+		//TODO: moveForward();
+		temp = getAvgStr(acS3R, acS3L);
+		distance =+ getAvgStr(acS3R, acS3L) - temp;
+	}
 }
 
 void moveOut()
