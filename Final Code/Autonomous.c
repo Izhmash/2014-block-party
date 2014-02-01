@@ -42,6 +42,7 @@ void turnLeft();
 void turnRight();
 void strafeLeft();
 void strafeRight();
+
 int getAvgDir();
 int getAvgStr(int acSXR, int acSXL);
 int getAvgLeftStr();
@@ -51,7 +52,7 @@ int _dirACL;
 int _dirACR;
 int acS1L, acS2L, acS3L, acS4L, acS5L;
 int acS1R, acS2R, acS3R, acS4R, acS5R;
-int avgLeftStr, avgRightStr, avgDir, avgStr1, avgStr2, avgStr3, avgStr4, avgStr5;
+int avgStr,avgLeftStr, avgRightStr, avgDir, avgStr1, avgStr2, avgStr3, avgStr4, avgStr5;
 
 int distance;
 
@@ -186,6 +187,14 @@ int getAvgDir()
 }
 
 /*
+Returns average of all strengths
+*/
+int getAvgStr()
+{
+	return getAvgLeftStr() + getAvgRightStr();
+}
+
+/*
 Parameters: (right IR strength direction, left IR strength directoin
 Gets the average of two IR strength directions, each from a different IR sensor
 */
@@ -221,6 +230,7 @@ void updateSensors()
 	_dirACL = HTIRS2readACDir(IRL);
 	_dirACR = HTIRS2readACDir(IRR);
 
+	avgStr = getAvgStr();
 	avgLeftStr = getAvgLeftStr();
 	avgRightStr = getAvgRightStr();
 
