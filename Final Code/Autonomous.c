@@ -34,8 +34,10 @@
 //void trackIR();
 //void stopAllMotors();
 void updateSensors();
+void moveForward();
 void moveOut();
 void aimAtIR();
+void approachIR(int d);
 void turnLeft();
 void turnRight();
 void strafeLeft();
@@ -50,6 +52,8 @@ int _dirACR;
 int acS1L, acS2L, acS3L, acS4L, acS5L;
 int acS1R, acS2R, acS3R, acS4R, acS5R;
 int avgLeftStr, avgRightStr, avgDir, avgStr1, avgStr2, avgStr3, avgStr4, avgStr5;
+
+int distance;
 
 tHTIRS2DSPMode _mode = DSP_1200;
 
@@ -76,7 +80,8 @@ task main()
 		//moveOut();
 	}*/
 	//moveOut();
-	aimAtIR();
+	//aimAtIR();
+	approachIR(5);
 }
 
 /*
@@ -106,14 +111,20 @@ Moves foward until d units of IR strength units has been reached (sector 3)
 */
 void approachIR(int d)
 {
-	int distance = 0;
-	int temp = 0;
-	while(distance < d)
+	updateSensors();
+
+	/*int*/ distance = getAvgStr(acS3R, acS3L);
+	int temp = distance - d;
+	while(distance > temp)
 	{
+		updateSensors();
 		moveForward();
-		temp = getAvgStr(acS3R, acS3L);
-		distance =+ getAvgStr(acS3R, acS3L) - temp;
+	  nxtDisplayCenteredBigTextLine(3,"%c", 'a');
+		distance = getAvgStr(acS3R, acS3L);
 	}
+	stopAllMotors();
+	//PlaySound(soundBeepBeep);
+	//wait1Msec(500);
 }
 
 void moveOut()
@@ -128,10 +139,10 @@ void moveOut()
 
 void moveForward()
 {
-	motor[frontLeftMotor] = -20
-	motor[frontRightMotor] = 20
-	motor[backleftMotor] = 20
-	motor[backRightMotor] = -20
+	motor[frontLeftMotor] = -20;
+	motor[frontRightMotor] = 20;
+	motor[backLeftMotor] = 20;
+	motor[backRightMotor] = -20;
 }
 
 void turnRight()
