@@ -110,7 +110,7 @@ void approachIR(int d)
 	int temp = 0;
 	while(distance < d)
 	{
-		//TODO: moveForward();
+		moveForward();
 		temp = getAvgStr(acS3R, acS3L);
 		distance =+ getAvgStr(acS3R, acS3L) - temp;
 	}
@@ -124,6 +124,14 @@ void moveOut()
 	motor[backRightMotor] = -100;
 	wait1Msec(1250);
 	stopAllMotors();
+}
+
+void moveForward()
+{
+	motor[frontLeftMotor] = -20
+	motor[frontRightMotor] = 20
+	motor[backleftMotor] = 20
+	motor[backRightMotor] = -20
 }
 
 void turnRight()
