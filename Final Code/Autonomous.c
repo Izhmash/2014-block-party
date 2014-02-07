@@ -24,8 +24,6 @@
 
 //Shoot when the IR beacon reaches a "sweet spot" in front of the bot
 
-//test
-
 #include "..\Driver Suite\drivers\hitechnic-irseeker-v2.h"
 //#include "JoystickDriver.c"  //remove?
 #include "BotSystems.h"
