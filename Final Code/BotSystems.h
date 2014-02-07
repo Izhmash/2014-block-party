@@ -65,8 +65,6 @@ void initSystems()
 {
 	servo[camServo1] = 76;
 	servo[camServo2] = 128;
-	//nMotorEncoder[LBoomMotor] = 0;
-	//nMotorEncoder[RBoomMotor] = 0;
 	nMotorEncoder[M4Motor] = 0;
 }
 
