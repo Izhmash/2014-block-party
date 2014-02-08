@@ -1,4 +1,5 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S4, HTServo,  none,     none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     ,               sensorI2CMuxController)
@@ -6,14 +7,14 @@
 #pragma config(Sensor, S3,     IRL,            sensorI2CCustom)
 #pragma config(Motor,  motorA,          magLeft,       tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  motorB,          magRight,      tmotorNXT, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C1_1,     backRightMotor, tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C1_2,     frontRightMotor, tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C2_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C2_2,     flagMotor,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_1,     LBoomMotor,    tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_2,     RBoomMotor,    tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C3_1,     backLeftMotor, tmotorTetrix, openLoop)   //change back to C4
-#pragma config(Motor,  mtr_S1_C3_2,     frontLeftMotor, tmotorTetrix, openLoop)  //change back to C4
+#pragma config(Motor,  mtr_S1_C1_1,     LBoomMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_2,     RBoomMotor, tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_1,     frontRightMotor,    tmotorTetrix, openLoop)  //change back to C1!!!!!!
+#pragma config(Motor,  mtr_S1_C4_2,     backRightMotor,    tmotorTetrix, openLoop, reversed)//change back to C1!!!!!!
+#pragma config(Motor,  mtr_S1_C2_1,     backLeftMotor, tmotorTetrix, openLoop)   //change back to C4
+#pragma config(Motor,  mtr_S1_C2_2,     frontLeftMotor, tmotorTetrix, openLoop)  //change back to C4
 #pragma config(Servo,  srvo_S4_C1_1,    camServo1,            tServoStandard)
 #pragma config(Servo,  srvo_S4_C1_2,    camServo2,            tServoStandard)
 #pragma config(Servo,  srvo_S4_C1_3,    servo3,               tServoNone)
