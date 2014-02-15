@@ -11,7 +11,7 @@
 #pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_1,     frontRightMotor,    tmotorTetrix, openLoop)  //change back to C1!!!!!!
-#pragma config(Motor,  mtr_S1_C4_2,     backRightMotor,    tmotorTetrix, openLoop, reversed)//change back to C1!!!!!!
+#pragma config(Motor,  mtr_S1_C4_2,     backRightMotor,    tmotorTetrix, openLoop)//change back to C1!!!!!!
 #pragma config(Motor,  mtr_S1_C2_1,     backLeftMotor, tmotorTetrix, openLoop)   //change back to C4
 #pragma config(Motor,  mtr_S1_C2_2,     frontLeftMotor, tmotorTetrix, openLoop)  //change back to C4
 #pragma config(Servo,  srvo_S2_C1_1,    camServo2,            tServoStandard)
@@ -90,19 +90,19 @@ task main()
 
 		if(joy2Btn(3))														//Button B pressed => FULL POWER!!!/3000
 		{
-			pullBack(6000);											//3000 = Pull back distance
+			pullBack(12000);											//3000 = Pull back distance
 		}
 		if(joy2Btn(4))														//Button Y pressed => medium high power/2300
 		{
-			pullBack(4600);
+			pullBack(9200);
 		}
 		if(joy2Btn(1))														//Button x pressed => medium low power/1500
 		{
-			pullBack(3000);
+			pullBack(6000);
 		}
 		if(joy2Btn(2))														//Button a pressed => low power/1000
 		{
-			pullBack(2300);
+			pullBack(4600);
 		}
 		//}
 		if(joy2Btn(8))															//Fires the servo hit - return when right trigger button pressed again
