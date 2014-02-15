@@ -50,8 +50,8 @@ void pullBack(int distance)
 
 void fire()																		//Pulses servo to press up cam
 {
-	servo[camServo1] = 116;  //from 156
-	servo[camServo2] = 88;  //from 48
+	servo[camServo1] = 125;  //from 156
+	servo[camServo2] = 79;  //from 48
 	wait10Msec(50);
 	servo[camServo1] = 76;
 	servo[camServo2] = 128;
@@ -73,6 +73,8 @@ void stopAllMotors()
 	motor[backRightMotor] = 0;
 	motor[flagMotor] = 0;
 }
+
+
 /*
 shiftOut function shifts out bytes using SDI and SCK pins -- manually before and after shiftOut set CSA pin
 

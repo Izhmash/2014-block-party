@@ -30,12 +30,16 @@
 #define IN 1
 #define OUT -1
 
+task Pull();
+
 float Y1, Y2, X1, X2;
 //float factor = .63;
 //float factor = .1969;
 //float factor = .7874;  //limits to 100
 //float factor = .007874;  //limits to 1
 byte mag = STOP;
+
+int localPower;
 
 task main()
 {
@@ -88,7 +92,7 @@ task main()
 
 		//---------------------------------------M4---------------------------------------------------
 
-		if(joy2Btn(3))														//Button B pressed => FULL POWER!!!/3000
+		/*if(joy2Btn(3))														//Button B pressed => FULL POWER!!!/3000
 		{
 			pullBack(12000);											//3000 = Pull back distance
 		}
@@ -103,8 +107,29 @@ task main()
 		if(joy2Btn(2))														//Button a pressed => low power/1000
 		{
 			pullBack(4600);
+		}*/
+
+		if(joy2Btn(3))														//Button B pressed => FULL POWER!!!/3000
+		{
+			localPower = 12000;											//3000 = Pull back distance
+			StartTask(Pull);
 		}
-		//}
+		if(joy2Btn(4))														//Button Y pressed => medium high power/2300
+		{
+			localPower = 9200;
+			StartTask(Pull);
+		}
+		if(joy2Btn(1))														//Button x pressed => medium low power/1500
+		{
+			localPower = 6000;
+			StartTask(Pull);
+		}
+		if(joy2Btn(2))														//Button a pressed => low power/1000
+		{
+			localPower = 4600;
+			StartTask(Pull);
+		}
+
 		if(joy2Btn(8))															//Fires the servo hit - return when right trigger button pressed again
 		{
 			fire();
@@ -145,4 +170,10 @@ task main()
 
 		wait1Msec(100);
 	}
+}
+
+task Pull()
+{
+	pullBack(localPower);
+	StopTask(Pull);
 }

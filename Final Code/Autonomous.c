@@ -8,7 +8,7 @@
 #pragma config(Motor,  motorB,          magRight,      tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     LBoomMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     RBoomMotor, tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_1,     frontRightMotor,    tmotorTetrix, openLoop)  //change back to C1!!!!!!
 #pragma config(Motor,  mtr_S1_C4_2,     backRightMotor,    tmotorTetrix, openLoop, reversed)//change back to C1!!!!!!
@@ -81,7 +81,11 @@ task main()
 	}*/
 	//moveOut();
 	aimAtIR();
-	approachIR(4);
+	stopAllMotors();
+	pullBack(4600);
+	fire();
+
+	//approachIR(4);
 }
 
 /*
@@ -99,9 +103,9 @@ void aimAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 	{
 		updateSensors();
 		if(_dirACL == 5 && _dirACR == 5) /*stopAllMotors();*/ return;
-		else if(avgLeftStr < 15 && avgRightStr < 15) turnLeft();
-		else if(avgLeftStr > avgRightStr) turnLeft();
-		else/*(avgLeftStr < avgRightStr)*/ turnRight();
+		else if(avgLeftStr < 15 && avgRightStr < 15) strafeLeft();
+		else if(avgLeftStr > avgRightStr) strafeLeft();
+		else/*(avgLeftStr < avgRightStr)*/ strafeRight();
 	}
 	//stopAllMotors();
 }
@@ -161,20 +165,20 @@ void turnLeft()
 	motor[backRightMotor] = -20;
 }
 
-void strafeRight()
-{
-	motor[frontLeftMotor] = -100;
-	motor[frontRightMotor] = -100;
-	motor[backLeftMotor] = 100;
-	motor[backRightMotor] = 100;
-}
-
 void strafeLeft()
 {
-	motor[frontLeftMotor] = 100;
-	motor[frontRightMotor] = 100;
-	motor[backLeftMotor] = -100;
-	motor[backRightMotor] = -100;
+	motor[frontLeftMotor] = -30;
+	motor[frontRightMotor] = -30;
+	motor[backLeftMotor] = 30;
+	motor[backRightMotor] = 30;
+}
+
+void strafeRight()
+{
+	motor[frontLeftMotor] = 30;
+	motor[frontRightMotor] = 30;
+	motor[backLeftMotor] = -30;
+	motor[backRightMotor] = -30;
 }
 
 /*
