@@ -4,7 +4,7 @@
 /*
 HiTechnic Experimenter's Kit for the SuperPro
 */
-#define 	analog   0x42
+//#define 	analogIn   0x42
 
 /*
 00
@@ -30,9 +30,10 @@ task main()
 void irSensor()
 {
 	//distance = HTSPBreadADC(HTSPB,analog0,8);
-   distance = HTSPBreadADC(HTSPB, analog,8);
-
+  // distance = HTSPBreadADC(HTSPB, analog,8);
+   distance = HTSPBreadADC(HTSPB, 0x42,8);
+   writeDebugStream("int deistance is: %d", distance);
   //distance = HTSPBreadAllADC	(	HTSPB,int & 	adch0,int & 	adch1,int & 	adch2,int & 	adch3,int & 	adch4,byte 	width);	
-nxtDisplayCenteredBigTextLine(4, "%d", distance);
+   //nxtDisplayCenteredBigTextLine(4, "%d", distance);
 	wait10Msec(10);
 }
