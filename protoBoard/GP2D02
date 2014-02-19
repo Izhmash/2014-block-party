@@ -1,0 +1,49 @@
+#pragma config(Sensor, S1,     HTSPB,                sensorI2CCustom9V)
+
+#define SDA_PIN 0x02		//Set to digital value you want to send
+#define SCK_PIN 0x01		//Clock high then low when data is set
+
+/*
+00
+||-pinVout
+|
+|--pinVin
+
+*/
+byte getRawRange();
+#include "hitechnic-superpro.h"
+#define pinVin 0x02		//pinVin = first bit pin
+#define pinVout 0x01		//pinVout = second bit pin
+task main()
+{
+	eraseDisplay();
+	while(true)
+	{
+		HTSPBwriteIO(HTSPB, pinVin);
+		int distance = getRawRange();
+		nxtDisplayTextLine(1, "A0: %d", distance);
+	}
+}
+
+byte getRawRange()
+{
+	byte val = 0;
+
+	HTSPBwriteIO(HTSPB,0x00);		//pinVin low,pinVout low
+	wait1Msec(70);
+
+	for(int i = 7; i >= 0; i--)
+	{
+		HTSPBwriteIO(HTSPB,pinVin);				//PinVin high, pinVout low
+		wait1Msec(.1);
+		HTSPBwriteIO(HTSPB,0x00);				//Pinvin low,
+		wait1Msec(.1);
+		val |= (HTSPBreadIO(HTSPB,pinVout)<<i);		//Collect the bits
+		//	val |= (digitalRead(_pinVout) << i);
+	}
+
+	HTSPBwriteIO(HTSPB,pinVin);
+	wait1Msec(2);
+	HTSPBwriteIO(HTSPB,0x00);
+	return val;
+};
