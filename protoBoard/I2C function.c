@@ -21,7 +21,7 @@ void I2COut(byte data);
 
 task main()
 {
-	HTSPBsetupIO(HTSPB,SDA_PIN | SCK_PIN);			//Set bot SDA and SCK high for initial i2c
+	HTSPBsetupIO(HTSPB,SDA_PIN | SCK_PIN);			//Set up pins to use
 	I2COut(0x54);
 }
 
