@@ -50,8 +50,8 @@ void pullBack(int distance)
 
 void fire()																		//Pulses servo to press up cam
 {
-	servo[camServo1] = 125;  //from 156
-	servo[camServo2] = 79;  //from 48
+	servo[camServo1] = 135;  //from 156  //from 125
+	servo[camServo2] = 69;  //from 48  //from 79
 	wait10Msec(50);
 	servo[camServo1] = 56;
 	servo[camServo2] = 148;
