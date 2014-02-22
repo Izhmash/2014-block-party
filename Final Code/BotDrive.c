@@ -45,6 +45,8 @@ task main()
 {
 	initSystems();
 
+	nVolume = 4;
+
 	while(true)
 	{
 		getJoystickSettings(joystick);  //Try inside and outside the loop
@@ -68,9 +70,9 @@ task main()
 		nxtDisplayCenteredTextLine(5, "degrees: " "%f", getDirDegrees(X1,Y1));
 
 		/*
-		 *  Try wheel speed formula c = s*cos((PI/4)-theta)
-		 *  s = max motor speed
-		 */
+		*  Try wheel speed formula c = s*cos((PI/4)-theta)
+		*  s = max motor speed
+		*/
 
 		motor[frontRightMotor] = X1 - Y2 + X2;
 		motor[backRightMotor] =  X1 - Y2 - X2;
@@ -94,7 +96,7 @@ task main()
 
 		if(joy2Btn(3))														//Button B pressed => FULL POWER!!!/3000
 		{
-			localPower = 12000;											//3000 = Pull back distance
+			localPower = 11500;											//3000 = Pull back distance
 			StartTask(Pull);
 		}
 		if(joy2Btn(4))														//Button Y pressed => medium high power/2300
@@ -124,50 +126,40 @@ task main()
 
 		//---------------------------------------Magazine-------------------------------------------
 
-		/*if(joy1Btn(6) || joy2Btn(6))
-			mag = IN;
-		if(joy1Btn(5) || joy2Btn(5))
-			mag = OUT;
-		if(joy1Btn(5) && joy1Btn(6) || joy2Btn(5) && joy2Btn(6))
-			mag = STOP;*/
 
-		//NEEDS TESTING
 
-	  if(joy2Btn(6))
-	  {
-	  	motor[magLeft] = 100;
-			motor[magRight] = 100;
-	  }
-	  else if(mag != IN)
-	  {
-	  	motor[magLeft] = 0;
-			motor[magRight] = 0;
-	  }
+		if(joystick.joy2_y2 > 10 || joystick.joy2_y2 < -10)
+		{
+			mag = 4;
+			motor[magLeft] = joystick.joy2_y2 / 1.28;
+			motor[magRight] = joystick.joy2_y2 / 1.28;
+			PlayTone(abs(joystick.joy2_y2) * (abs((int)joystick.joy2_x1 + 5 / 10)), 10);
+		}
+		else
+		{
+			motor[magLeft] = 0;
+			motor [magRight] = 0;
+		}
 
-	  if(joy2Btn(5))
-	  {
-	  	motor[magLeft] = 100;
-			motor[magRight] = 100;
-	  }
-	  else if(mag != OUT)
-	  {
-	  	motor[magLeft] = 0;
-			motor[magRight] = 0;
-	  }
+		writeDebugStream("%d", mag);
 
-	  //END TESTING
+		if(joy1Btn(6)) mag = IN;
+		if(joy1Btn(5)) mag = OUT;
+		if(joy1Btn(5) && joy1Btn(6)) mag = STOP;
 
 		if(mag == IN)
 		{
 			motor[magLeft] = 100;
 			motor[magRight] = 100;
+			PlayTone(500, 10);
 		}
 		else if(mag == OUT)
 		{
 			motor[magLeft] = -100;
 			motor[magRight] = -100;
+			PlayTone(1000, 10);
 		}
-		else
+		else if(mag == STOP)
 		{
 			motor[magLeft] = 0;
 			motor[magRight] = 0;

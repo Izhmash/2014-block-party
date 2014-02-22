@@ -53,15 +53,15 @@ void fire()																		//Pulses servo to press up cam
 	servo[camServo1] = 125;  //from 156
 	servo[camServo2] = 79;  //from 48
 	wait10Msec(50);
-	servo[camServo1] = 76;
-	servo[camServo2] = 128;
+	servo[camServo1] = 56;
+	servo[camServo2] = 148;
 	armed = false;
 }
 
 void initSystems()
 {
-	servo[camServo1] = 76;
-	servo[camServo2] = 128;
+	servo[camServo1] = 56;  //from 76
+	servo[camServo2] = 148;  //from 128
 	nMotorEncoder[M4Motor] = 0;
 }
 
