@@ -92,23 +92,6 @@ task main()
 
 		//---------------------------------------M4---------------------------------------------------
 
-		/*if(joy2Btn(3))														//Button B pressed => FULL POWER!!!/3000
-		{
-			pullBack(12000);											//3000 = Pull back distance
-		}
-		if(joy2Btn(4))														//Button Y pressed => medium high power/2300
-		{
-			pullBack(9200);
-		}
-		if(joy2Btn(1))														//Button x pressed => medium low power/1500
-		{
-			pullBack(6000);
-		}
-		if(joy2Btn(2))														//Button a pressed => low power/1000
-		{
-			pullBack(4600);
-		}*/
-
 		if(joy2Btn(3))														//Button B pressed => FULL POWER!!!/3000
 		{
 			localPower = 12000;											//3000 = Pull back distance
@@ -141,12 +124,38 @@ task main()
 
 		//---------------------------------------Magazine-------------------------------------------
 
-		if(joy1Btn(6) || joy2Btn(6))
+		/*if(joy1Btn(6) || joy2Btn(6))
 			mag = IN;
 		if(joy1Btn(5) || joy2Btn(5))
 			mag = OUT;
 		if(joy1Btn(5) && joy1Btn(6) || joy2Btn(5) && joy2Btn(6))
-			mag = STOP;
+			mag = STOP;*/
+
+		//NEEDS TESTING
+
+	  if(joy2Btn(6))
+	  {
+	  	motor[magLeft] = 100;
+			motor[magRight] = 100;
+	  }
+	  else if(mag != IN)
+	  {
+	  	motor[magLeft] = 0;
+			motor[magRight] = 0;
+	  }
+
+	  if(joy2Btn(5))
+	  {
+	  	motor[magLeft] = 100;
+			motor[magRight] = 100;
+	  }
+	  else if(mag != OUT)
+	  {
+	  	motor[magLeft] = 0;
+			motor[magRight] = 0;
+	  }
+
+	  //END TESTING
 
 		if(mag == IN)
 		{

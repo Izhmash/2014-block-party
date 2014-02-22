@@ -1,3 +1,5 @@
+//unfinished
+
 float getMagnitude(float X, float Y)
 {
 	return sqrt(pow(X, 2) + pow(Y, 2));
