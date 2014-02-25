@@ -8,7 +8,7 @@
 #pragma config(Motor,  motorB,          magRight,      tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     LBoomMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     RBoomMotor, tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_1,     frontRightMotor,    tmotorTetrix, openLoop)  //change back to C1!!!!!!
 #pragma config(Motor,  mtr_S1_C4_2,     backRightMotor,    tmotorTetrix, openLoop)//change back to C1!!!!!!
@@ -26,26 +26,37 @@
 #include "BotSystems.h"
 #include "PolarJoystick.h"
 
-#define STOP 0
+/*#define STOP 0
 #define IN 1
 #define OUT -1
 
+#define FRONT 0
+#define BACK 1
+#define LEFT 2
+#define RIGHT 3*/
+
+typedef enum {STOP = 0, IN = 1, OUT = -1} Magazine;
+typedef enum {FRONT = 0, BACK = 1, LEFT = 2, RIGHT = 3} Direction;
+
 task Pull();
 
-float Y1, Y2, X1, X2;
-//float factor = .63;
-//float factor = .1969;
-//float factor = .7874;  //limits to 100
-//float factor = .007874;  //limits to 1
-byte mag = STOP;
+static float Y1, Y2, X1, X2;
+static float factor;
 
-int localPower;
+static byte mag;
+static byte dir;
+
+static int localPower;
 
 task main()
 {
 	initSystems();
 
-	nVolume = 4;
+	nVolume = 4;  // 4 = max volume
+
+	factor = 1.28;
+	mag = STOP;
+	dir = FRONT;
 
 	while(true)
 	{
@@ -58,31 +69,46 @@ task main()
 		X1 = (float)joystick.joy1_x1 / 1.28;
 		X2 = (float)joystick.joy1_x2 / 1.28;
 
-		/*Y1 = joystick.joy1_y1 * -factor;
-		Y2 = joystick.joy1_y2 * -factor;
-		X1 = joystick.joy1_x1 * factor;
-		X2 = joystick.joy1_x2 * factor;*/
+		if(joy1Btn(2))
+		{
+			if(factor == 1.28)
+				factor = .3906;
+			else factor = 1.28;
+		}
 
-		//-------------------Polar Joystick Testing---------------------------//
-		eraseDisplay();
-		nxtDisplayCenteredTextLine(1, "mag: " "%f", getMagnitude(X1,Y1));
-		nxtDisplayCenteredTextLine(3, "rads: " "%f", getDirRads(X1,Y1));
-		nxtDisplayCenteredTextLine(5, "degrees: " "%f", getDirDegrees(X1,Y1));
+		if(joystick.joy1_TopHat == 0) dir = FRONT;
+		if(joystick.joy1_TopHat == 4) dir = BACK;
+		if(joystick.joy1_TopHat == 6) dir = LEFT;
+		if(joystick.joy1_TopHat == 2) dir = RIGHT;
 
-		/*
-		*  Try wheel speed formula c = s*cos((PI/4)-theta)
-		*  s = max motor speed
-		*/
-
-		motor[frontRightMotor] = X1 - Y2 + X2;
-		motor[backRightMotor] =  X1 - Y2 - X2;
-		motor[frontLeftMotor] = X1 + Y2 + X2;
-		motor[backLeftMotor] =  X1 + Y2 - X2;
-
-		/*motor[frontRightMotor] = getMagnitude(X1, Y1)*cos((PI/4) - getDirRads(X1, Y1));
-		motor[backRightMotor] =  getMagnitude(X1, Y1)*cos((PI/4) - getDirRads(X1, Y1));
-		motor[frontLeftMotor] = getMagnitude(X1, Y1)*cos((PI/4) - getDirRads(X1, Y1));
-		motor[backLeftMotor] =  getMagnitude(X1, Y1)*cos((PI/4) - getDirRads(X1, Y1));*/
+		if(dir == FRONT)
+		{
+			motor[frontRightMotor] = X1 - Y2 + X2;
+			motor[backRightMotor] =  X1 - Y2 - X2;
+			motor[frontLeftMotor] = X1 + Y2 + X2;
+			motor[backLeftMotor] =  X1 + Y2 - X2;
+		}
+		else if(dir == BACK)
+		{
+			motor[frontRightMotor] = X1 + Y2 - X2;
+			motor[backRightMotor] =  X1 + Y2 + X2;
+			motor[frontLeftMotor] = X1 - Y2 - X2;
+			motor[backLeftMotor] =  X1 - Y2 + X2;
+		}
+		else if(dir == RIGHT)
+		{
+			motor[frontRightMotor] = X1 - X2 + Y2;
+			motor[backRightMotor] =  X1 - X2 - Y2;
+			motor[frontLeftMotor] = X1 + X2 + Y2;
+			motor[backLeftMotor] =  X1 + X2 - Y2;
+		}
+		else   //dir == RIGHT
+		{
+			motor[frontRightMotor] = X1 + X2 - Y2;
+			motor[backRightMotor] =  X1 + X2 + Y2;
+			motor[frontLeftMotor] = X1 - X2 - Y2;
+			motor[backLeftMotor] =  X1 - X2 + Y2;
+		}
 
 		//--------------------------------------Flag-----------------------------------------------
 
@@ -94,24 +120,26 @@ task main()
 
 		//---------------------------------------M4---------------------------------------------------
 
-		if(joy2Btn(3))														//Button B pressed => FULL POWER!!!/3000
+		//~20 encoder counts per degree of rotation
+
+		if(joy2Btn(3))														//Button B pressed => FULL POWER
 		{
-			localPower = 11500;											//3000 = Pull back distance
+			localPower = 9520;
 			StartTask(Pull);
 		}
-		if(joy2Btn(4))														//Button Y pressed => medium high power/2300
+		if(joy2Btn(4))														//Button Y pressed => medium high power
 		{
-			localPower = 9200;
+			localPower = 7000;
 			StartTask(Pull);
 		}
-		if(joy2Btn(1))														//Button x pressed => medium low power/1500
+		if(joy2Btn(1))														//Button x pressed => medium low power
 		{
-			localPower = 6000;
+			localPower = 5000;
 			StartTask(Pull);
 		}
-		if(joy2Btn(2))														//Button a pressed => low power/1000
+		if(joy2Btn(2))														//Button a pressed => low power
 		{
-			localPower = 4600;
+			localPower = 3600;
 			StartTask(Pull);
 		}
 
@@ -133,7 +161,7 @@ task main()
 			mag = 4;
 			motor[magLeft] = joystick.joy2_y2 / 1.28;
 			motor[magRight] = joystick.joy2_y2 / 1.28;
-			PlayTone(abs(joystick.joy2_y2) * (abs((int)joystick.joy2_x1 + 5 / 10)), 10);
+			PlayTone(abs(joystick.joy2_y2 * 10) * (abs((int)joystick.joy2_x1 + 5 / 10)), 10);
 		}
 		else
 		{

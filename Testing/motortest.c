@@ -9,7 +9,7 @@
 #pragma config(Motor,  mtr_S1_C1_2,     frontLeftMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     backRightMotor, tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C2_2,     frontRightMotor, tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_1,     LBoomMotor,    tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_2,     RBoomMotor,    tmotorTetrix, openLoop, reversed)
@@ -36,6 +36,7 @@ task main()
 	nMotorEncoder[motor1] = 0;
 	while(true)
 	{
+		motor[M4Motor] = joystick.joy1_y1 / 1.28;
 		getJoystickSettings(joystick);
 		if(nMotorEncoder[motor1] > 180 || nMotorEncoder[motor1] < -180) nMotorEncoder[motor1] = 0;
 		//e = nMotorEncoder[motor1];
