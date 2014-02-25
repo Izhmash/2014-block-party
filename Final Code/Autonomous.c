@@ -32,28 +32,28 @@
 //void holonomicBeepAtIR();
 //void trackIR();
 //void stopAllMotors();
-void updateSensors();
-void moveForward();
-void moveOut();
-void aimAtIR();
-void approachIR(int d);
-void turnLeft();
-void turnRight();
-void strafeLeft();
-void strafeRight();
+static void updateSensors();
+static void moveForward();
+static void moveOut();
+static void aimAtIR();
+static void approachIR(int d);
+static void turnLeft();
+static void turnRight();
+static void strafeLeft();
+static void strafeRight();
 
-int getAvgDir();
-int getAvgStr(int acSXR, int acSXL);
-int getAvgLeftStr();
-int getAvgRightStr();
+static int getAvgDir();
+static int getAvgStr(int acSXR, int acSXL);
+static int getAvgLeftStr();
+static int getAvgRightStr();
 
-int _dirACL;
-int _dirACR;
-int acS1L, acS2L, acS3L, acS4L, acS5L;
-int acS1R, acS2R, acS3R, acS4R, acS5R;
-int avgStr,avgLeftStr, avgRightStr, avgDir, avgStr1, avgStr2, avgStr3, avgStr4, avgStr5;
+static int _dirACL;
+static int _dirACR;
+static int acS1L, acS2L, acS3L, acS4L, acS5L;
+static int acS1R, acS2R, acS3R, acS4R, acS5R;
+static int avgStr,avgLeftStr, avgRightStr, avgDir, avgStr1, avgStr2, avgStr3, avgStr4, avgStr5;
 
-int distance;
+static int distance;
 
 tHTIRS2DSPMode _mode = DSP_1200;
 
@@ -91,7 +91,7 @@ task main()
 /*
 Points at the IR crate
 */
-void aimAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
+static void aimAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 {
 	//-----------------------------Setup-------------------------------------------------
 	updateSensors();
@@ -113,7 +113,7 @@ void aimAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 /*
 Moves foward until d units of IR strength units has been reached (sector 3)
 */
-void approachIR(int d)
+static void approachIR(int d)
 {
 	updateSensors();
 
@@ -131,7 +131,7 @@ void approachIR(int d)
 	//wait1Msec(500);
 }
 
-void moveOut()
+static void moveOut()
 {
 	motor[frontLeftMotor] = 100;
 	motor[frontRightMotor] = 100;
@@ -141,7 +141,7 @@ void moveOut()
 	stopAllMotors();
 }
 
-void moveForward()
+static void moveForward()
 {
 	motor[frontLeftMotor] = 100;
 	motor[frontRightMotor] = -100;
@@ -149,7 +149,7 @@ void moveForward()
 	motor[backRightMotor] = -100;
 }
 
-void turnRight()
+static void turnRight()
 {
 	motor[frontLeftMotor] = 20;
 	motor[frontRightMotor] = 20;
@@ -157,7 +157,7 @@ void turnRight()
 	motor[backRightMotor] = 20;
 }
 
-void turnLeft()
+static void turnLeft()
 {
 	motor[frontLeftMotor] = -20;
 	motor[frontRightMotor] = -20;
@@ -165,7 +165,7 @@ void turnLeft()
 	motor[backRightMotor] = -20;
 }
 
-void strafeLeft()
+static void strafeLeft()
 {
 	motor[frontLeftMotor] = -30;
 	motor[frontRightMotor] = -30;
@@ -173,7 +173,7 @@ void strafeLeft()
 	motor[backRightMotor] = 30;
 }
 
-void strafeRight()
+static void strafeRight()
 {
 	motor[frontLeftMotor] = 30;
 	motor[frontRightMotor] = 30;
@@ -184,7 +184,7 @@ void strafeRight()
 /*
 Gets the average direction from the two IR sensors
 */
-int getAvgDir()
+static int getAvgDir()
 {
 	return (_dirACL + _dirACR) / 2;
 }
@@ -192,7 +192,7 @@ int getAvgDir()
 /*
 Returns average of all strengths
 */
-int getAvgStr()
+static int getAvgStr()
 {
 	return getAvgLeftStr() + getAvgRightStr();
 }
@@ -201,7 +201,7 @@ int getAvgStr()
 Parameters: (right IR strength direction, left IR strength directoin
 Gets the average of two IR strength directions, each from a different IR sensor
 */
-int getAvgStr(int acSXR, int acSXL)
+static int getAvgStr(int acSXR, int acSXL)
 {
 	return (acSXR + acSXL) / 2;
 }
@@ -209,7 +209,7 @@ int getAvgStr(int acSXR, int acSXL)
 /*
 Returns average of all left strength sectors
 */
-int getAvgLeftStr()
+static int getAvgLeftStr()
 {
 	return (acS1L + acS2L + acS3L + acS4L + acS5L) / 5;
 }
@@ -217,7 +217,7 @@ int getAvgLeftStr()
 /*
 Returns average of all right strength sectors
 */
-int getAvgRightStr()
+static int getAvgRightStr()
 {
 	return (acS1R + acS2R + acS3R + acS4R + acS5R) / 5;
 }
@@ -225,7 +225,7 @@ int getAvgRightStr()
 /*
 Updates sensor information
 */
-void updateSensors()
+static void updateSensors()
 {
 	HTIRS2setDSPMode(IRL, _mode);
 	HTIRS2setDSPMode(IRR, _mode);

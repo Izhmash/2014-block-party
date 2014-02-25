@@ -32,7 +32,7 @@ void fire();
 void stopAllMotors();
 void initSystems();
 
-bool armed = false;
+static bool armed = false;
 
 //Load: Press a button on the right low-to-high(a,x,y,b) then press the right trigger to load to power
 //Fire!: Press right trigger again to fire
