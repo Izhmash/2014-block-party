@@ -11,8 +11,7 @@ task main()
 	HTSPBsetupIO(HTSPB,TEST_PIN);
 	while(true)
 	{
-	  HTSPBwriteIO(HTSPB, 0x00);					//Pin low
-	  wait10Msec(100);
+	  HTSPBwriteIO(HTSPB, 0x00);	//Pin low
 	  HTSPBwriteIO(HTSPB, TEST_PIN);			//Pin high
 	}
 }
