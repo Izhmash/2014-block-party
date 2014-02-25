@@ -8,7 +8,7 @@
 #pragma config(Motor,  motorB,          magRight,      tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     LBoomMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     RBoomMotor, tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_1,     frontRightMotor,    tmotorTetrix, openLoop)  //change back to C1!!!!!!
 #pragma config(Motor,  mtr_S1_C4_2,     backRightMotor,    tmotorTetrix, openLoop)//change back to C1!!!!!!
@@ -52,7 +52,7 @@ void fire()																		//Pulses servo to press up cam
 {
 	servo[camServo1] = 135;  //from 156  //from 125
 	servo[camServo2] = 69;  //from 48  //from 79
-	wait10Msec(50);
+	wait1Msec(500);
 	servo[camServo1] = 56;
 	servo[camServo2] = 148;
 	armed = false;
