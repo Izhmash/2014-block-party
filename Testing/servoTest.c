@@ -1,6 +1,6 @@
 #pragma config(Hubs,  S1, HTServo,  none,     none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Servo,  srvo_S1_C1_1,    cont1,                tServoContinuousRotation)
+#pragma config(Servo,  srvo_S1_C1_1,    servo1,               tServoStandard)
 #pragma config(Servo,  srvo_S1_C1_2,    servo2,               tServoNone)
 #pragma config(Servo,  srvo_S1_C1_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S1_C1_4,    servo4,               tServoNone)
@@ -12,12 +12,15 @@
 
 task main()
 {
+	servo[servo3] = 240;
 	while(true)
 	{
 		getJoystickSettings(joystick);
-		if(joy1Btn(2)) servo[cont1] = 254;
-		if(joy1Btn(3)) servo[cont1] = 1;
-		if(joy1Btn(4)) servo[cont1] = 128;
-		wait1Msec(10);
+		if(joy1Btn(2))
+		{
+			servo[servo3] = 100;
+			wait1Msec(400);
+		}
+		servo[servo3] = 240;
 	}
 }

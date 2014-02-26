@@ -6,17 +6,17 @@
 #pragma config(Sensor, S4,     IRL,            sensorI2CCustom)
 #pragma config(Motor,  motorA,          magLeft,       tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  motorB,          magRight,      tmotorNXT, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C1_1,     LBoomMotor, tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C1_2,     RBoomMotor, tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C1_1,     LBoomMotor,    tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_2,     RBoomMotor,    tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_1,     backLeftMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_2,     frontLeftMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_1,     frontRightMotor,    tmotorTetrix, openLoop)  //change back to C1!!!!!!
-#pragma config(Motor,  mtr_S1_C4_2,     backRightMotor,    tmotorTetrix, openLoop)   //change back to C1!!!!!!
-#pragma config(Motor,  mtr_S1_C2_1,     backLeftMotor, tmotorTetrix, openLoop)       //change back to C4
-#pragma config(Motor,  mtr_S1_C2_2,     frontLeftMotor, tmotorTetrix, openLoop)      //change back to C4
+#pragma config(Motor,  mtr_S1_C4_1,     frontRightMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_2,     backRightMotor, tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S2_C1_1,    camServo2,            tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_2,    camServo1,            tServoStandard)        //both servos switched
-#pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
+#pragma config(Servo,  srvo_S2_C1_2,    camServo1,            tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_3,    hookServo,            tServoNone)
 #pragma config(Servo,  srvo_S2_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_6,    servo6,               tServoNone)
@@ -37,6 +37,7 @@ static void moveForward();
 static void moveOut();
 static void strafeIR();
 static void approachIR(int d);
+static void moveToRamp();
 static void turnLeft();
 static void turnRight();
 static void strafeLeft();
@@ -89,9 +90,9 @@ task main()
 }
 
 /*
-Points at the IR crate
+Strafes until the IR crate appears
 */
-static void strafeIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
+static void strafeIR()
 {
 	//-----------------------------Setup-------------------------------------------------
 	updateSensors();
@@ -129,6 +130,11 @@ static void approachIR(int d)
 	stopAllMotors();
 	//PlaySound(soundBeepBeep);
 	//wait1Msec(500);
+}
+
+static void moveToRamp()
+{
+	//TODO
 }
 
 static void moveOut()

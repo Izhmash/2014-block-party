@@ -6,17 +6,17 @@
 #pragma config(Sensor, S4,     IRL,            sensorI2CCustom)
 #pragma config(Motor,  motorA,          magLeft,       tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  motorB,          magRight,      tmotorNXT, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C1_1,     LBoomMotor, tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C1_2,     RBoomMotor, tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C1_1,     LBoomMotor,    tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_2,     RBoomMotor,    tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_1,     backLeftMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_2,     frontLeftMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_1,     frontRightMotor,    tmotorTetrix, openLoop)  //change back to C1!!!!!!
-#pragma config(Motor,  mtr_S1_C4_2,     backRightMotor,    tmotorTetrix, openLoop)//change back to C1!!!!!!
-#pragma config(Motor,  mtr_S1_C2_1,     backLeftMotor, tmotorTetrix, openLoop)   //change back to C4
-#pragma config(Motor,  mtr_S1_C2_2,     frontLeftMotor, tmotorTetrix, openLoop)  //change back to C4
+#pragma config(Motor,  mtr_S1_C4_1,     frontRightMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_2,     backRightMotor, tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S2_C1_1,    camServo2,            tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_2,    camServo1,            tServoStandard)   //both servos switched
-#pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
+#pragma config(Servo,  srvo_S2_C1_2,    camServo1,            tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_3,    hookServo,            tServoNone)
 #pragma config(Servo,  srvo_S2_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_5,    servo5,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_6,    servo6,               tServoNone)
@@ -47,6 +47,8 @@ task main()
 	factor = 1.28;
 	mag = STOP;
 	dir = FRONT;
+
+	servo[hookServo] = 230;
 
 	while(true)
 	{
@@ -92,7 +94,7 @@ task main()
 			motor[frontLeftMotor] = X1 + X2 + Y2;
 			motor[backLeftMotor] =  X1 + X2 - Y2;
 		}
-		else   //dir == RIGHT
+		else   //dir == LEFT
 		{
 			motor[frontRightMotor] = X1 + X2 - Y2;
 			motor[backRightMotor] =  X1 + X2 + Y2;
@@ -144,15 +146,12 @@ task main()
 
 		//---------------------------------------Magazine-------------------------------------------
 
-
-
 		if(joystick.joy2_y2 > 10 || joystick.joy2_y2 < -10)
 		{
 			mag = 4;
 			motor[magLeft] = joystick.joy2_y2 / 1.28;
 			motor[magRight] = joystick.joy2_y2 / 1.28;
-			PlayTone(abs(joystick.joy2_y2 * 10) * (abs((int)joystick.joy2_x1 + 5 / 10)), 10);
-
+			PlayTone(abs(joystick.joy2_y2 / 10) * (abs((int)joystick.joy2_x1 + 5 / 20)), 10);
 		}
 		else
 		{
@@ -183,6 +182,9 @@ task main()
 			motor[magLeft] = 0;
 			motor[magRight] = 0;
 		}
+
+		//---------------------------------------Hooks----------------------------------------------
+		if(joy1Btn(2)) servo[hookServo] = 100;
 		//---------------------------------------Extras---------------------------------------------
 
 		if(joy1Btn(10) || joy2Btn(10)) stopAllMotors();
