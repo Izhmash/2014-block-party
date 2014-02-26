@@ -11,11 +11,11 @@
 #pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C4_1,     frontRightMotor,    tmotorTetrix, openLoop)  //change back to C1!!!!!!
-#pragma config(Motor,  mtr_S1_C4_2,     backRightMotor,    tmotorTetrix, openLoop)//change back to C1!!!!!!
-#pragma config(Motor,  mtr_S1_C2_1,     backLeftMotor, tmotorTetrix, openLoop)   //change back to C4
-#pragma config(Motor,  mtr_S1_C2_2,     frontLeftMotor, tmotorTetrix, openLoop)  //change back to C4
+#pragma config(Motor,  mtr_S1_C4_2,     backRightMotor,    tmotorTetrix, openLoop)   //change back to C1!!!!!!
+#pragma config(Motor,  mtr_S1_C2_1,     backLeftMotor, tmotorTetrix, openLoop)       //change back to C4
+#pragma config(Motor,  mtr_S1_C2_2,     frontLeftMotor, tmotorTetrix, openLoop)      //change back to C4
 #pragma config(Servo,  srvo_S2_C1_1,    camServo2,            tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_2,    camServo1,            tServoStandard)   //both servos switched
+#pragma config(Servo,  srvo_S2_C1_2,    camServo1,            tServoStandard)        //both servos switched
 #pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_5,    servo5,               tServoNone)
@@ -35,7 +35,7 @@
 static void updateSensors();
 static void moveForward();
 static void moveOut();
-static void aimAtIR();
+static void strafeIR();
 static void approachIR(int d);
 static void turnLeft();
 static void turnRight();
@@ -80,7 +80,7 @@ task main()
 		//moveOut();
 	}*/
 	//moveOut();
-	aimAtIR();
+	strafeIR();
 	stopAllMotors();
 	pullBack(4600);
 	fire();
@@ -91,7 +91,7 @@ task main()
 /*
 Points at the IR crate
 */
-static void aimAtIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
+static void strafeIR()  //good zone: both dirs 5, both strengths in 3 from 60-90
 {
 	//-----------------------------Setup-------------------------------------------------
 	updateSensors();

@@ -25,15 +25,6 @@
 #include "BotSystems.h"
 #include "PolarJoystick.h"
 
-/*#define STOP 0
-#define IN 1
-#define OUT -1
-
-#define FRONT 0
-#define BACK 1
-#define LEFT 2
-#define RIGHT 3*/
-
 typedef enum {STOP = 0, IN = 1, OUT = -1} Magazine;
 typedef enum {FRONT = 0, BACK = 1, LEFT = 2, RIGHT = 3} Direction;
 
