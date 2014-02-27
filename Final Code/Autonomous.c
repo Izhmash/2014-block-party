@@ -111,6 +111,55 @@ static void strafeIR()
 	//stopAllMotors();
 }
 
+void trackIR()
+{
+	//-----------------------------IR Setup-------------------------------------------------
+	updateSensors();
+
+	//-----------------------------Moving the Bot--------------------------------------------
+	if(avgDir < 5)
+	{
+		if(avgDir < 4)
+		{
+			motor[frontLeftMotor] = -50;
+			motor[frontRightMotor] = 50;
+			motor[backLeftMotor] = 50;
+			motor[backRightMotor] = -50;
+		}
+		else  //avgDir == 4
+		{
+			motor[frontLeftMotor] = 0;
+			motor[frontRightMotor] = 50;
+			motor[backLeftMotor] = -50;
+			motor[backRightMotor] = 0;
+		}
+	}
+	else if(avgDir > 5)
+	{
+		if(avgDir > 6)
+		{
+			motor[frontLeftMotor] = 50;
+			motor[frontRightMotor] = -50;
+			motor[backLeftMotor] = -50;
+			motor[backRightMotor] = 50;
+		}
+		else  //avgDir == 6
+		{
+			motor[frontLeftMotor] = 50;
+			motor[frontRightMotor] = 0;
+			motor[backLeftMotor] = 0;
+			motor[backRightMotor] = -50;
+		}
+	}
+	else  //avgDir == 5
+	{
+		motor[frontLeftMotor] = 50;
+		motor[frontRightMotor] = 50;
+		motor[backLeftMotor] = -50;
+		motor[backRightMotor] = -50;
+	}
+}
+
 /*
 Moves foward until d units of IR strength units has been reached (sector 3)
 */
