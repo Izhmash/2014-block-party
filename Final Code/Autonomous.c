@@ -25,6 +25,7 @@
 
 //Shoot when the IR beacon reaches a "sweet spot" in front of the bot
 
+#include "..\Driver Suite\drivers\hitechnic-sensormux.h"
 #include "..\Driver Suite\drivers\hitechnic-irseeker-v2.h"
 //#include "JoystickDriver.c"  //remove?
 #include "BotSystems.h"
@@ -55,6 +56,9 @@ static int acS1R, acS2R, acS3R, acS4R, acS5R;
 static int avgStr,avgLeftStr, avgRightStr, avgDir, avgStr1, avgStr2, avgStr3, avgStr4, avgStr5;
 
 static int distance;
+
+const tMUXSensor IRL = msensor_S3_1;
+const tMUXSensor IRR = msensor_S3_2;
 
 tHTIRS2DSPMode _mode = DSP_1200;
 
@@ -111,7 +115,7 @@ static void strafeIR()
 	//stopAllMotors();
 }
 
-void trackIR()
+static void trackIR()
 {
 	//-----------------------------IR Setup-------------------------------------------------
 	updateSensors();
