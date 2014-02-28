@@ -53,17 +53,15 @@ task main()
 
 		//-------------------------------------Holonomic------------------------------------------
 
-		Y1 = /*(float)*/joystick.joy1_y1 / 1.28;
-		Y2 = /*(float)*/joystick.joy1_y2 / 1.28;
-		X1 = /*(float)*/joystick.joy1_x1 / 1.28;
-		X2 = /*(float)*/joystick.joy1_x2 / 1.28;
+		Y1 = /*(float)*/joystick.joy1_y1 * factor;
+		Y2 = /*(float)*/joystick.joy1_y2 * factor;
+		X1 = /*(float)*/joystick.joy1_x1 * factor;
+		X2 = /*(float)*/joystick.joy1_x2 * factor;
 
-		if(joy1Btn(2))
-		{
-			if(factor == 1.28)
-				factor = .3906;
-			else factor = 1.28;
-		}
+		if(joy1Btn(2))  factor = .781;
+
+
+		if(joy1Btn(3))  factor = .3906;
 
 		if(joystick.joy1_TopHat == 0) dir = FRONT;
 		if(joystick.joy1_TopHat == 4) dir = BACK;
@@ -86,17 +84,17 @@ task main()
 		}
 		else if(dir == RIGHT)
 		{
-			motor[frontRightMotor] = X1 - X2 + Y2;
-			motor[backRightMotor] =  X1 - X2 - Y2;
-			motor[frontLeftMotor] = X1 + X2 + Y2;
-			motor[backLeftMotor] =  X1 + X2 - Y2;
+			motor[frontRightMotor] = X1 + X2 + Y2;
+			motor[backRightMotor] =  X1 + X2 - Y2;
+			motor[frontLeftMotor] = X1 - X2 + Y2;
+			motor[backLeftMotor] =  X1 - X2 - Y2;
 		}
 		else   //dir == LEFT
 		{
-			motor[frontRightMotor] = X1 + X2 - Y2;
-			motor[backRightMotor] =  X1 + X2 + Y2;
-			motor[frontLeftMotor] = X1 - X2 - Y2;
-			motor[backLeftMotor] =  X1 - X2 + Y2;
+			motor[frontRightMotor] = X1 - X2 - Y2;
+			motor[backRightMotor] =  X1 - X2 + Y2;
+			motor[frontLeftMotor] = X1 + X2 - Y2;
+			motor[backLeftMotor] =  X1 + X2 + Y2;
 		}
 
 		//--------------------------------------Flag-----------------------------------------------
@@ -113,22 +111,22 @@ task main()
 
 		if(joy2Btn(3))														//Button B pressed => FULL POWER
 		{
-			localPower = 9520;
+			localPower = 7200;
 			StartTask(Pull);
 		}
 		if(joy2Btn(4))														//Button Y pressed => medium high power
 		{
-			localPower = 7000;
+			localPower = 5000;
 			StartTask(Pull);
 		}
 		if(joy2Btn(1))														//Button x pressed => medium low power
 		{
-			localPower = 5000;
+			localPower = 3000;
 			StartTask(Pull);
 		}
 		if(joy2Btn(2))														//Button a pressed => low power
 		{
-			localPower = 3000;
+			localPower = 1000;
 			StartTask(Pull);
 		}
 

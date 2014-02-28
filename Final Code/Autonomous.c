@@ -31,8 +31,8 @@
 //void stopAllMotors();
 static void updateSensors();
 static void moveForward();
-static void moveOut();
 static void strafeIR();
+static void rotateIR();
 static void approachIR(int d);
 static void moveToRamp();
 static void turnLeft();
@@ -66,6 +66,7 @@ task main()
 	initSystems();
 	/*while(true)
 	{
+		//moveForward();
 		//eraseDisplay();
 		updateSensors();
 		avgDir = getAvgDir();
@@ -82,8 +83,11 @@ task main()
 	}*/
 	//moveOut();
 	strafeIR();
+	//wait1Msec(1000);
+	//rotateIR();
+	//while(avgStr3 < 115)  moveForward();
 	stopAllMotors();
-	pullBack(4600);
+	pullBack(1500);
 	fire();
 
 	//approachIR(4);
@@ -97,16 +101,34 @@ static void strafeIR()
 	//-----------------------------Setup-------------------------------------------------
 	updateSensors();
 	//pullBack(1500);      //load...
+	ClearTimer(T1);
+	//-----------------------------Moving the Bot--------------------------------------------
 
+	while(true)
+	{
+		updateSensors();
+		if(_dirACL == 6 && _dirACR == 5) /*stopAllMotors();*/ return;
+		else if(avgLeftStr < 15 && avgRightStr < 15) strafeLeft();
+		else if(avgLeftStr > avgRightStr) strafeLeft();
+		else/*(avgLeftStr < avgRightStr)*/ strafeRight();
+	}
+	//stopAllMotors();
+}
+
+static void rotateIR()
+{
+	//-----------------------------Setup-------------------------------------------------
+	updateSensors();
 	//-----------------------------Moving the Bot--------------------------------------------
 
 	while(true)
 	{
 		updateSensors();
 		if(_dirACL == 5 && _dirACR == 5) /*stopAllMotors();*/ return;
-		else if(avgLeftStr < 15 && avgRightStr < 15) strafeLeft();
-		else if(avgLeftStr > avgRightStr) strafeLeft();
-		else/*(avgLeftStr < avgRightStr)*/ strafeRight();
+		//if(avgLeftStr == avgRightStr) /*stopAllMotors();*/ return;
+		else if(avgLeftStr < 15 && avgRightStr < 15) turnLeft();
+		else if(avgLeftStr > avgRightStr) turnLeft();
+		else/*(avgLeftStr < avgRightStr)*/ turnRight();
 	}
 	//stopAllMotors();
 }
@@ -186,22 +208,12 @@ static void moveToRamp()
 	//TODO
 }
 
-static void moveOut()
-{
-	motor[frontLeftMotor] = 100;
-	motor[frontRightMotor] = 100;
-	motor[backLeftMotor] = -100;
-	motor[backRightMotor] = -100;
-	wait1Msec(1250);
-	stopAllMotors();
-}
-
 static void moveForward()
 {
-	motor[frontLeftMotor] = 100;
-	motor[frontRightMotor] = -100;
-	motor[backLeftMotor] = 100;
-	motor[backRightMotor] = -100;
+	motor[frontLeftMotor] = 40;
+	motor[frontRightMotor] = -40;
+	motor[backLeftMotor] = 40;
+	motor[backRightMotor] = -40;
 }
 
 static void turnRight()
@@ -224,7 +236,7 @@ static void strafeLeft()
 {
 	motor[frontLeftMotor] = -30;
 	motor[frontRightMotor] = -30;
-	motor[backLeftMotor] = 30;
+	motor[backLeftMotor] = 35;  //compensation
 	motor[backRightMotor] = 30;
 }
 
