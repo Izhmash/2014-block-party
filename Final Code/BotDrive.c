@@ -1,21 +1,18 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S2, HTServo,  none,     none,     none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S2,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S3,     IRR,            sensorI2CCustom)
-#pragma config(Sensor, S4,     IRL,            sensorI2CCustom)
+#pragma config(Sensor, S3,     HTSMUX,         sensorI2CCustom)
 #pragma config(Motor,  motorA,          magLeft,       tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  motorB,          magRight,      tmotorNXT, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_1,     LBoomMotor,    tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     RBoomMotor,    tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C4_1,     backLeftMotor, tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_2,     frontLeftMotor, tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     frontRightMotor, tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     backRightMotor, tmotorTetrix, openLoop)
-#pragma config(Servo,  srvo_S2_C1_1,    camServo2,            tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_2,    camServo1,            tServoStandard)
+#pragma config(Motor,  mtr_S1_C3_1,     M4Motor,       tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C3_2,     flagMotor,     tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_1,     backLeftMotor, tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_2,     frontLeftMotor, tmotorTetrix, openLoop)
+#pragma config(Servo,  srvo_S2_C1_1,    camServo1,            tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_2,    camServo2,            tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_3,    hookServo,            tServoNone)
 #pragma config(Servo,  srvo_S2_C1_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_5,    servo5,               tServoNone)
@@ -42,13 +39,13 @@ task main()
 {
 	initSystems();
 
-	nVolume = 2;  // 4 = max volume
+	nVolume = 4;  // 4 = max volume
 
 	factor = 1.28;
 	mag = STOP;
 	dir = FRONT;
 
-	servo[hookServo] = 230;
+	servo[hookServo] = 0;
 
 	while(true)
 	{
@@ -56,10 +53,10 @@ task main()
 
 		//-------------------------------------Holonomic------------------------------------------
 
-		Y1 = (float)joystick.joy1_y1 / 1.28;
-		Y2 = (float)joystick.joy1_y2 / 1.28;
-		X1 = (float)joystick.joy1_x1 / 1.28;
-		X2 = (float)joystick.joy1_x2 / 1.28;
+		Y1 = /*(float)*/joystick.joy1_y1 / 1.28;
+		Y2 = /*(float)*/joystick.joy1_y2 / 1.28;
+		X1 = /*(float)*/joystick.joy1_x1 / 1.28;
+		X2 = /*(float)*/joystick.joy1_x2 / 1.28;
 
 		if(joy1Btn(2))
 		{
@@ -131,7 +128,7 @@ task main()
 		}
 		if(joy2Btn(2))														//Button a pressed => low power
 		{
-			localPower = 3600;
+			localPower = 3000;
 			StartTask(Pull);
 		}
 
@@ -141,8 +138,8 @@ task main()
 		}
 		//----------------------------------------Boom----------------------------------------------
 
-		motor[LBoomMotor] = joystick.joy2_y1 / 1.28;
-		motor[RBoomMotor] = joystick.joy2_y1 / 1.28;
+		motor[LBoomMotor] = joystick.joy2_y1 / -1.28;
+		motor[RBoomMotor] = joystick.joy2_y1 / -1.28;
 
 		//---------------------------------------Magazine-------------------------------------------
 
@@ -151,7 +148,7 @@ task main()
 			mag = 4;
 			motor[magLeft] = joystick.joy2_y2 / 1.28;
 			motor[magRight] = joystick.joy2_y2 / 1.28;
-			PlayTone(abs(joystick.joy2_y2 / 10) * (abs((int)joystick.joy2_x1 + 5 / 20)), 10);
+			PlayTone(abs(joystick.joy2_y2 / 10) * (abs((int)joystick.joy2_x1 + 5 / 10)), 10);
 		}
 		else
 		{
@@ -159,7 +156,7 @@ task main()
 			motor [magRight] = 0;
 		}
 
-		writeDebugStream("%d", mag);
+		//writeDebugStream("%d", mag);
 
 		if(joy1Btn(6)) mag = IN;
 		if(joy1Btn(5)) mag = OUT;
@@ -184,13 +181,17 @@ task main()
 		}
 
 		//---------------------------------------Hooks----------------------------------------------
-		if(joy1Btn(2)) servo[hookServo] = 100;
+		if(joystick.joy2_TopHat == 1)
+		{
+			servo[hookServo] = 230;
+			PlaySound(soundBeepBeep);
+		}
 		//---------------------------------------Extras---------------------------------------------
 
 		if(joy1Btn(10) || joy2Btn(10)) stopAllMotors();
 		//PlayTone((rand() % (700-500)) + 500, 5);     //rand() % (max-min)) + min;
 
-		wait1Msec(100);
+		wait1Msec(10);
 	}
 }
 
