@@ -23,6 +23,8 @@
 
 #include "..\Driver Suite\drivers\hitechnic-sensormux.h"
 #include "..\Driver Suite\drivers\hitechnic-irseeker-v2.h"
+#include "..\Driver Suite\drivers\lego-ultrasound.h"
+#include "..\Driver Suite\drivers\hitechnic-accelerometer.h"
 //#include "JoystickDriver.c"  //remove?
 #include "BotSystems.h"
 
@@ -40,6 +42,9 @@ static void turnRight();
 static void strafeLeft();
 static void strafeRight();
 
+static int readAvgXaxis();
+static int readAvgYaxis();
+
 static int getAvgDir();
 static int getAvgStr(int acSXR, int acSXL);
 static int getAvgLeftStr();
@@ -51,12 +56,20 @@ static int acS1L, acS2L, acS3L, acS4L, acS5L;
 static int acS1R, acS2R, acS3R, acS4R, acS5R;
 static int avgStr,avgLeftStr, avgRightStr, avgDir, avgStr1, avgStr2, avgStr3, avgStr4, avgStr5;
 
+static int x, y;
+
+static int _x_axis, _y_axis, _z_axis;
+static int avgDelay = 1;
+static int numAvg = 15;
+
 static int distance;
 
 const tMUXSensor IRL = msensor_S3_1;
 const tMUXSensor IRR = msensor_S3_2;
+const tMUXSensor sonar = msensor_S3_4;
+const tMUXSensor accel = msensor_S3_3;
 
-tHTIRS2DSPMode _mode = DSP_1200;
+//tHTIRS2DSPMode _mode = DSP_1200;
 
 task main()
 {
@@ -64,7 +77,7 @@ task main()
 	//getJoystickSettings(joystick);
 	//eraseDisplay();
 	initSystems();
-	/*while(true)
+	while(true)
 	{
 		//moveForward();
 		//eraseDisplay();
@@ -80,15 +93,18 @@ task main()
 		nxtDisplayCenteredTextLine(4, "%d", avgDir);
 		//aimAtIR();
 		//moveOut();
-	}*/
+		x = readAvgXaxis();
+		y = readAvgYaxis();
+	}
 	//moveOut();
-	strafeIR();
+	//strafeIR();
 	//wait1Msec(1000);
 	//rotateIR();
 	//while(avgStr3 < 115)  moveForward();
-	stopAllMotors();
-	pullBack(1500);
-	fire();
+	//stopAllMotors();
+	//pullBack(1500);
+	//fire();
+	moveToRamp();
 
 	//approachIR(4);
 }
@@ -133,55 +149,6 @@ static void rotateIR()
 	//stopAllMotors();
 }
 
-static void trackIR()
-{
-	//-----------------------------IR Setup-------------------------------------------------
-	updateSensors();
-
-	//-----------------------------Moving the Bot--------------------------------------------
-	if(avgDir < 5)
-	{
-		if(avgDir < 4)
-		{
-			motor[frontLeftMotor] = -50;
-			motor[frontRightMotor] = 50;
-			motor[backLeftMotor] = 50;
-			motor[backRightMotor] = -50;
-		}
-		else  //avgDir == 4
-		{
-			motor[frontLeftMotor] = 0;
-			motor[frontRightMotor] = 50;
-			motor[backLeftMotor] = -50;
-			motor[backRightMotor] = 0;
-		}
-	}
-	else if(avgDir > 5)
-	{
-		if(avgDir > 6)
-		{
-			motor[frontLeftMotor] = 50;
-			motor[frontRightMotor] = -50;
-			motor[backLeftMotor] = -50;
-			motor[backRightMotor] = 50;
-		}
-		else  //avgDir == 6
-		{
-			motor[frontLeftMotor] = 50;
-			motor[frontRightMotor] = 0;
-			motor[backLeftMotor] = 0;
-			motor[backRightMotor] = -50;
-		}
-	}
-	else  //avgDir == 5
-	{
-		motor[frontLeftMotor] = 50;
-		motor[frontRightMotor] = 50;
-		motor[backLeftMotor] = -50;
-		motor[backRightMotor] = -50;
-	}
-}
-
 /*
 Moves foward until d units of IR strength units has been reached (sector 3)
 */
@@ -195,7 +162,7 @@ static void approachIR(int d)
 	{
 		updateSensors();
 		moveForward();
-	  nxtDisplayCenteredBigTextLine(3,"%c", 'a');
+		nxtDisplayCenteredBigTextLine(3,"%c", 'a');
 		distance = getAvgStr(acS3R, acS3L);
 	}
 	stopAllMotors();
@@ -205,7 +172,19 @@ static void approachIR(int d)
 
 static void moveToRamp()
 {
-	//TODO
+	while(USreadDist(sonar) != 255)
+	{
+		strafeLeft();
+	}
+	wait1Msec(3000);
+	moveForward();
+	wait1Msec(4000);
+
+	while(readAvgYaxis() < 194)
+	{
+		strafeRight();
+	}
+	stopAllMotors();
 }
 
 static void moveForward()
@@ -288,6 +267,41 @@ static int getAvgRightStr()
 {
 	return (acS1R + acS2R + acS3R + acS4R + acS5R) / 5;
 }
+
+static int readAvgXaxis()                                   //eliminates noise of readings
+{
+	int avgX;
+	for(int i = 0; i < numAvg; i++)
+	{
+		// Read all of the axes at once
+		if (!HTACreadAllAxes(accel, _x_axis, _y_axis, _z_axis))
+		{
+			nxtDisplayTextLine(4, "ERROR!!");
+			wait1Msec(avgDelay);
+			//StopAllTasks();
+		}
+		avgX = (avgX + _x_axis) / 2;       //rolling average of x
+	}
+	return(avgX*.4444 + 100);
+}
+
+static int readAvgYaxis()                                   //eliminates noise of readings
+{
+	int avgY;
+	for(int i = 0; i < numAvg; i++)
+	{
+		// Read all of the axes at once
+		if (!HTACreadAllAxes(accel, _x_axis, _y_axis, _z_axis))
+		{
+			nxtDisplayTextLine(4, "ERROR!!");
+			wait1Msec(avgDelay);
+			//StopAllTasks();
+		}
+		avgY = (avgY + _y_axis) / 2;       //rolling average of x
+	}
+	return(abs(avgY*.4444-180));
+}
+
 
 /*
 Updates sensor information

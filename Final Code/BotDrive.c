@@ -111,7 +111,7 @@ task main()
 
 		if(joy2Btn(3))														//Button B pressed => FULL POWER
 		{
-			localPower = 7200;
+			localPower = 7100;
 			StartTask(Pull);
 		}
 		if(joy2Btn(4))														//Button Y pressed => medium high power
