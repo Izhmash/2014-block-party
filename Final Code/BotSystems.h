@@ -25,18 +25,18 @@ void pullBack(int distance)
 
 void fire()																		//Pulses servo to press up cam
 {
-	servo[camServo1] = 135;  //from 156  //from 125
-	servo[camServo2] = 69;  //from 48  //from 79
+	servo[camServo1] = 155;  //from 156  //from 135
+	servo[camServo2] = 49;  //from 48  //from 69
 	wait1Msec(500);
-	servo[camServo1] = 56;
-	servo[camServo2] = 148;
+	servo[camServo1] = 16;
+	servo[camServo2] = 188;
 	armed = false;
 }
 
 void initSystems()
 {
-	servo[camServo1] = 56;  //from 76
-	servo[camServo2] = 148;  //from 128
+	servo[camServo1] = 16;  //from 36
+	servo[camServo2] = 188;  //from 168
 	nMotorEncoder[M4Motor] = 0;
 }
 
