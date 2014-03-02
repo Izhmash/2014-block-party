@@ -108,7 +108,7 @@ task main()
 	strafeLeft();
 	wait1Msec(4000);
 	moveForwardFast();
-	wait1Msec(6000);
+	wait1Msec(6500);
 	stopAllMotors();
 	//moveToRamp();
 
