@@ -37,12 +37,12 @@ void omniDrive()
 	Y1 = joystick.joy1_y1 / -1.28;
 	Y2 = joystick.joy1_y2 / -1.28;
 	X1 = joystick.joy1_x1 / 1.28;
-	X2 = joystick.joy1_x2 / 1.28;
+	X2 = joystick.joy1_x2 / -1.28;
 
-	motor[frontRightMotor] = -Y2 - X1 - X2;
-	motor[backRightMotor] =  -Y2 - X1 + X2;
-	motor[frontLeftMotor] = -Y2 + X1 + X2;
-	motor[backLeftMotor] =  -Y2 + X1 - X2;
+	motor[frontRightMotor] = Y2 - X1 + X2;
+	motor[backRightMotor] =  Y2 - X1 - X2;
+	motor[frontLeftMotor] = Y2 + X1 + X2;
+	motor[backLeftMotor] =  Y2 + X1 - X2;
 
   /*if(joy1Btn(8))
   	motor[flagMotor] = 100;
