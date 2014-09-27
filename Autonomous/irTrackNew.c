@@ -73,7 +73,7 @@ task main()
 	//initSystems();
 	while(true)
 	{
-		strafeLeft();
+		//strafeLeft();
 		updateSensors();
 		avgDir = getAvgDir();
 		avgStr1 = getAvgStr(acS1R, acS1L);
@@ -81,6 +81,8 @@ task main()
 		avgStr3 = getAvgStr(acS3R, acS3L);
 		avgStr4 = getAvgStr(acS4R, acS4L);
 		avgStr5 = getAvgStr(acS3R, acS5L);
+
+		trackIR();
 	}
 	//moveOut();
 	//strafeIR();
@@ -205,10 +207,11 @@ void trackIR()
 
 static void moveForward()
 {
-	motor[frontLeftMotor] = -80;
-	motor[frontRightMotor] = -80;
-	motor[backLeftMotor] = -80;
-	motor[backRightMotor] = -80;
+	motor[frontLeftMotor] = -40;
+	motor[frontRightMotor] = -40;
+	motor[backLeftMotor] = -40;
+	motor[backRightMotor] = -40;
+	//writeDebugStreamLine( "%s", "forward");
 }
 
 static void turnRight()
